@@ -1,2 +1,6 @@
-export type Track = [string, Array<boolean>[16]];
+export type Track = [
+  string,
+  number, number, number, number, number, number, number, number,
+  number, number, number, number, number, number, number, number
+];
 export type Tracks = Track[];
