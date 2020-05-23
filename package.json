@@ -1,6 +1,12 @@
 {
-  "name": "typescript",
+  "name": "ts-809-pure",
   "version": "0.0.0",
   "private": true,
-  "dependencies": {}
+  "scripts": {
+    "serve": "parcel src/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.9.3"
+  }
 }
