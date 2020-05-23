@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "serve": "parcel src/index.html"
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
