@@ -1,5 +1,3 @@
-// Import stylesheets
-import './style.css';
 import { Tracks } from './models/track';
 
 // Write TypeScript code!
