@@ -1,3 +1,3 @@
-# typescript-7ewj88
+# TS-809 pure
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/typescript-7ewj88)
+Testing playground for TS drum machine
