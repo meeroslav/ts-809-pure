@@ -1,5 +1,4 @@
-export type TrackSequence = [number, number, number, number, number, number, number, number,
-  number, number, number, number, number, number, number, number]; // 16 slots
+export type TrackSequence = number[];
 
 type TrackUrl = string;
 
