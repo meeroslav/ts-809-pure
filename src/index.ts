@@ -1,5 +1,5 @@
 import { demoRhythm } from './demo-track';
-import { Tracks } from './models/track';
+import { TRACK_SEQ, TRACK_STATE, TRACK_URL, Tracks } from './models/track';
 import { getContext } from './helpers/audio-context';
 import { loadBuffer } from './helpers/buffer-loader';
 
@@ -31,7 +31,7 @@ const init = async () => {
   audioContext = getContext();
   // load buffers
   buffers = await demoRhythm
-    .map(track => loadBuffer(`samples/${track[0]}`, audioContext))
+    .map(track => loadBuffer(`samples/${track[TRACK_URL]}`, audioContext))
     .reduce(async (prev, next, index) => {
       const nextBuffer = await next;
       return [...(await prev), nextBuffer];
@@ -49,7 +49,7 @@ const startPlaying = (tracks: Tracks) => setInterval(() => {
    `;
   if (audioContext && buffers) {
     tracks.forEach((track, index) => {
-      if (track[playPosition + 1]) {
+      if (track[TRACK_STATE] && track[TRACK_SEQ][playPosition]) {
         // PLAY SOUND
         const trackSource = audioContext.createBufferSource();
         trackSource.buffer = buffers[index];
