@@ -24,6 +24,8 @@ const togglePlay = () => {
   } else {
     toggleBtn.innerHTML = 'Play';
     clearInterval(playingInterval);
+    playPosition = 0;
+    renderInfo();
   }
 };
 
@@ -41,14 +43,17 @@ const init = async () => {
   togglePlay();
 };
 
-const startPlaying = (tracks: Tracks) => setInterval(() => {
-  playPosition = (playPosition + 1) % sequenceLength;
+const renderInfo = () => {
   info.innerHTML = `
     <br/>
     Position: ${playPosition}
     <br/>
     BPM: ${bpm}
    `;
+};
+
+const startPlaying = (tracks: Tracks) => setInterval(() => {
+  renderInfo();
   const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
   if (audioContext && buffers) {
     tracks.forEach((track, index) => {
@@ -67,6 +72,7 @@ const startPlaying = (tracks: Tracks) => setInterval(() => {
       }
     });
   }
+  playPosition = (playPosition + 1) % sequenceLength;
 }, BPM_MINUTE / bpm);
 
 (window as any).togglePlay = togglePlay;
