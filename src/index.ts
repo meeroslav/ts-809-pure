@@ -1,9 +1,9 @@
 import { demoRhythm } from './demo-track';
-import { Track, Tracks } from './models/track';
+import { Tracks } from './models/track';
 import { getContext } from './helpers/audio-context';
 import { loadBuffer } from './helpers/buffer-loader';
 
-const bpm = 125;
+const bpm = 168;
 const BPM_MINUTE = 60000 / 4;
 
 let playState = false;
@@ -12,6 +12,7 @@ let playPosition = 0;
 let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 const toggleBtn: HTMLElement = document.getElementById('toggle') || new HTMLElement();
+const info: HTMLElement = document.getElementById('info') || new HTMLElement();
 toggleBtn.innerHTML = 'Play';
 
 const togglePlay = () => {
@@ -34,12 +35,18 @@ const init = async () => {
     .reduce(async (prev, next, index) => {
       const nextBuffer = await next;
       return [...(await prev), nextBuffer];
-    }, Promise.resolve([]))
+    }, Promise.resolve([]));
+  togglePlay();
 };
 
 const startPlaying = (tracks: Tracks) => setInterval(() => {
   playPosition = (playPosition + 1) % 16;
-  console.log(playPosition);
+  info.innerHTML = `
+    <br/>
+    Position: ${playPosition}
+    <br/>
+    BPM: ${bpm}
+   `;
   if (audioContext && buffers) {
     tracks.forEach((track, index) => {
       if (track[playPosition + 1]) {
