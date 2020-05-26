@@ -1,0 +1,28 @@
+:root {
+    --font: Helvetica, Arial, Roboto, sans-serif;
+    --cl-fg: #323232;
+    --cl-action-bg: #43849f;
+    --cl-action-fg: #efefef;
+    --spacing: .5rem;
+    --btn-spacing: .5rem 1rem;
+    --border-radius: .3rem;
+}
+
+html {
+    font-family: var(--font);
+    color: var(--cl-fg);
+    padding: var(--spacing);
+}
+
+.action_btn {
+    background: var(--cl-action-bg);
+    color: var(--cl-action-fg);
+    padding: var(--btn-spacing);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+}
+
+#info {
+    margin-top: var(--spacing);
+}
