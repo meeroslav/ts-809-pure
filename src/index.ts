@@ -50,6 +50,33 @@ const renderTracks = () => {
     const trackSteps = track[TRACK_SEQ].map(step => `<span class="${ step ? 'step-on' : 'step-off' }"></span>`).join('');
     return `${acc}<div class='track'>${trackSteps}</div>`;
   }, '');
+  tracksEl.childNodes.forEach(track => console.log(track.childNodes));
+};
+
+const highlightTrackStep = (position: number) => {
+  const oldPos = (position + sequenceLength - 1) % sequenceLength;
+  console.log(position, oldPos);
+
+  tracksEl.childNodes.forEach(track => {
+    removeClass(track.childNodes[oldPos] as HTMLSpanElement, 'step-highlight');
+    addClass(track.childNodes[position] as HTMLSpanElement, 'step-highlight');
+  });
+};
+
+const removeClass = (el: HTMLElement, className: string) => {
+  el.className = el.className.replace(` ${className}`, '');
+};
+
+const addClass = (el: HTMLElement, className: string) => {
+  el.className += ` ${className}`;
+};
+
+const toggleClass = (el: HTMLElement, className: string) => {
+  if (el.className.match(className)) {
+    removeClass(el, className);
+  } else {
+    addClass(el, className);
+  }
 };
 
 const renderInfo = () => {
@@ -61,6 +88,7 @@ const renderInfo = () => {
 
 const startPlaying = (tracks: Tracks) => setInterval(() => {
   renderInfo();
+  highlightTrackStep(playPosition);
   const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
   if (audioContext && buffers) {
     tracks.forEach((track, index) => {

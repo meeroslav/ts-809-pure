@@ -6,6 +6,7 @@
     --cl-action-fg: #efefef;
     --cl-border: #c8c8c8;
     --cl-focus: #43849f;
+    --cl-highlight: #6b9f38;
     --spacing: .5rem;
     --spacing-sm: .25rem;
     --btn-spacing: .5rem 1rem;
@@ -47,6 +48,10 @@ html {
     border: 1px solid var(--cl-border);
 }
 
+.step-highlight {
+    box-shadow: 0 0 5px var(--cl-highlight);
+}
+
 .step-on {
-    background: var(--cl-focus);
+    background: var(--cl-highlight);
 }
