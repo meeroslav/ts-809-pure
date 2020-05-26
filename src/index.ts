@@ -1,5 +1,13 @@
 import { demoRhythm } from './demo-track';
-import { TRACK_SEQ, TRACK_STATE, TRACK_STATE_OFF, TRACK_STATE_SOLO, TRACK_URL, Tracks } from './models/track';
+import {
+  TRACK_NICK,
+  TRACK_SEQ,
+  TRACK_STATE,
+  TRACK_STATE_OFF,
+  TRACK_STATE_SOLO,
+  TRACK_URL,
+  Tracks
+} from './models/track';
 import { getContext } from './helpers/audio-context';
 import { loadBuffer } from './helpers/buffer-loader';
 
@@ -25,7 +33,9 @@ const togglePlay = () => {
   } else {
     toggleBtnEl.innerHTML = 'Play';
     clearInterval(playingInterval);
+
     playPosition = 0;
+    highlightTrackStep(playPosition);
     renderInfo();
   }
 };
@@ -48,18 +58,14 @@ const init = async () => {
 const renderTracks = () => {
   tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
     const trackSteps = track[TRACK_SEQ].map(step => `<span class="${ step ? 'step-on' : 'step-off' }"></span>`).join('');
-    return `${acc}<div class='track'>${trackSteps}</div>`;
+    return `${acc}<div class='track'><span class='track-name'>${track[TRACK_NICK]}</span>${trackSteps}</div>`;
   }, '');
-  tracksEl.childNodes.forEach(track => console.log(track.childNodes));
 };
 
 const highlightTrackStep = (position: number) => {
-  const oldPos = (position + sequenceLength - 1) % sequenceLength;
-  console.log(position, oldPos);
-
   tracksEl.childNodes.forEach(track => {
-    removeClass(track.childNodes[oldPos] as HTMLSpanElement, 'step-highlight');
-    addClass(track.childNodes[position] as HTMLSpanElement, 'step-highlight');
+    track.childNodes.forEach(step => removeClass(step as HTMLSpanElement, 'step-highlight'))
+    addClass(track.childNodes[position + 1] as HTMLSpanElement, 'step-highlight');
   });
 };
 
