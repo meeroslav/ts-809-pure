@@ -4,7 +4,10 @@
     --cl-fg: #323232;
     --cl-action-bg: #43849f;
     --cl-action-fg: #efefef;
+    --cl-border: #c8c8c8;
+    --cl-focus: #43849f;
     --spacing: .5rem;
+    --spacing-sm: .25rem;
     --btn-spacing: .5rem 1rem;
     --border-radius: .3rem;
 }
@@ -27,4 +30,23 @@ html {
 
 #info {
     margin-bottom: var(--spacing);
+}
+
+#tracks {
+    margin-top: var(--spacing);
+}
+
+.track {
+    margin-bottom: var(--spacing);
+}
+
+.step-on, .step-off {
+    display: inline-block;
+    padding: calc(var(--spacing) * 2) var(--spacing);
+    margin-right: var(--spacing-sm);
+    border: 1px solid var(--cl-border);
+}
+
+.step-on {
+    background: var(--cl-focus);
 }

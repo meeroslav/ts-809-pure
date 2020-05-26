@@ -12,17 +12,18 @@ let playPosition = 0;
 let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 let sequenceLength = 16;
-const toggleBtn: HTMLElement = document.getElementById('toggle') || new HTMLElement();
-const info: HTMLElement = document.getElementById('info') || new HTMLElement();
-toggleBtn.innerHTML = 'Play';
+const toggleBtnEl: HTMLElement = document.getElementById('toggle') || new HTMLElement();
+const infoEl: HTMLElement = document.getElementById('info') || new HTMLElement();
+const tracksEl: HTMLElement = document.getElementById('tracks') || new HTMLElement();
+toggleBtnEl.innerHTML = 'Play';
 
 const togglePlay = () => {
   playState = !playState;
   if (playState) {
-    toggleBtn.innerHTML = 'Stop';
+    toggleBtnEl.innerHTML = 'Stop';
     playingInterval = startPlaying(demoRhythm);
   } else {
-    toggleBtn.innerHTML = 'Play';
+    toggleBtnEl.innerHTML = 'Play';
     clearInterval(playingInterval);
     playPosition = 0;
     renderInfo();
@@ -41,10 +42,18 @@ const init = async () => {
       return [...(await prev), nextBuffer];
     }, Promise.resolve([]));
   togglePlay();
+  renderTracks();
+};
+
+const renderTracks = () => {
+  tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
+    const trackSteps = track[TRACK_SEQ].map(step => `<span class="${ step ? 'step-on' : 'step-off' }"></span>`).join('');
+    return `${acc}<div class='track'>${trackSteps}</div>`;
+  }, '');
 };
 
 const renderInfo = () => {
-  info.innerHTML = `
+  infoEl.innerHTML = `
     Position: ${playPosition}<br/>
     BPM: ${bpm}
    `;
