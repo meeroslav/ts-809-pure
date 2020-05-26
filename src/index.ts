@@ -45,9 +45,7 @@ const init = async () => {
 
 const renderInfo = () => {
   info.innerHTML = `
-    <br/>
-    Position: ${playPosition}
-    <br/>
+    Position: ${playPosition}<br/>
     BPM: ${bpm}
    `;
 };
