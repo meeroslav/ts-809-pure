@@ -12,6 +12,7 @@
   --btn-spacing: 0.5rem 1rem;
   --border-radius: 0.3rem;
   --boder-size: 1px;
+  --shadow-size: 5px;
   --border: var(--boder-size) solid var(--cl-border);
   --track-name-w: 5rem;
 }
@@ -64,7 +65,7 @@ html {
 }
 
 .step-highlight {
-  box-shadow: 0 0 5px var(--cl-highlight);
+  box-shadow: 0 0 var(--shadow-size) var(--cl-highlight);
 }
 
 .step-on {
