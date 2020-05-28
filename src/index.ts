@@ -99,6 +99,10 @@ const startPlaying = (tracks: Tracks) =>
     highlightTrackStep(playPosition);
     const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
+      const lowPassFilter = audioContext.createBiquadFilter();
+      lowPassFilter.type = 'lowpass';
+      lowPassFilter.frequency.value = audioContext.sampleRate / 2;
+
       tracks.forEach((track, index) => {
         if (track[TRACK_STATE] === TRACK_STATE_OFF) {
           return;
@@ -110,11 +114,11 @@ const startPlaying = (tracks: Tracks) =>
           // PLAY SOUND
           const source = audioContext.createBufferSource();
           const volume = audioContext.createGain();
+          volume.gain.value = track[TRACK_VOLUME];
           source.buffer = buffers[index];
           source.connect(volume);
-          volume.connect(audioContext.destination);
-          volume.gain.value = track[TRACK_VOLUME];
-          // trackSource.connect(audioContext.destination);
+          volume.connect(lowPassFilter);
+          lowPassFilter.connect(audioContext.destination);
           source.start();
         }
       });
