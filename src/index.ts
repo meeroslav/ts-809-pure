@@ -6,7 +6,8 @@ import {
   TRACK_STATE_OFF,
   TRACK_STATE_SOLO,
   TRACK_URL,
-  Tracks
+  Tracks,
+  TRACK_VOLUME,
 } from './models/track';
 import { getContext } from './helpers/audio-context';
 import { loadBuffer } from './helpers/buffer-loader';
@@ -57,14 +58,14 @@ const init = async () => {
 
 const renderTracks = () => {
   tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
-    const trackSteps = track[TRACK_SEQ].map(step => `<span class="${ step ? 'step-on' : 'step-off' }"></span>`).join('');
+    const trackSteps = track[TRACK_SEQ].map(step => `<span class="${step ? 'step-on' : 'step-off'}"></span>`).join('');
     return `${acc}<div class='track'><span class='track-name'>${track[TRACK_NICK]}</span>${trackSteps}</div>`;
   }, '');
 };
 
 const highlightTrackStep = (position: number) => {
   tracksEl.childNodes.forEach(track => {
-    track.childNodes.forEach(step => removeClass(step as HTMLSpanElement, 'step-highlight'))
+    track.childNodes.forEach(step => removeClass(step as HTMLSpanElement, 'step-highlight'));
     addClass(track.childNodes[position + 1] as HTMLSpanElement, 'step-highlight');
   });
 };
@@ -92,29 +93,34 @@ const renderInfo = () => {
    `;
 };
 
-const startPlaying = (tracks: Tracks) => setInterval(() => {
-  renderInfo();
-  highlightTrackStep(playPosition);
-  const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
-  if (audioContext && buffers) {
-    tracks.forEach((track, index) => {
-      if (track[TRACK_STATE] === TRACK_STATE_OFF) {
-        return;
-      }
-      if (soloOnly && track[TRACK_STATE] !== TRACK_STATE_SOLO) {
-        return;
-      }
-      if (track[TRACK_SEQ][playPosition]) {
-        // PLAY SOUND
-        const trackSource = audioContext.createBufferSource();
-        trackSource.buffer = buffers[index];
-        trackSource.connect(audioContext.destination);
-        trackSource.start();
-      }
-    });
-  }
-  playPosition = (playPosition + 1) % sequenceLength;
-}, BPM_MINUTE / bpm);
+const startPlaying = (tracks: Tracks) =>
+  setInterval(() => {
+    renderInfo();
+    highlightTrackStep(playPosition);
+    const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
+    if (audioContext && buffers) {
+      tracks.forEach((track, index) => {
+        if (track[TRACK_STATE] === TRACK_STATE_OFF) {
+          return;
+        }
+        if (soloOnly && track[TRACK_STATE] !== TRACK_STATE_SOLO) {
+          return;
+        }
+        if (track[TRACK_SEQ][playPosition]) {
+          // PLAY SOUND
+          const source = audioContext.createBufferSource();
+          const volume = audioContext.createGain();
+          source.buffer = buffers[index];
+          source.connect(volume);
+          volume.connect(audioContext.destination);
+          volume.gain.value = track[TRACK_VOLUME];
+          // trackSource.connect(audioContext.destination);
+          source.start();
+        }
+      });
+    }
+    playPosition = (playPosition + 1) % sequenceLength;
+  }, BPM_MINUTE / bpm);
 
 (window as any).togglePlay = togglePlay;
 

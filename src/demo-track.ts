@@ -1,9 +1,4 @@
-import {
-  TRACK_STATE_OFF,
-  TRACK_STATE_ON,
-  TRACK_STATE_SOLO,
-  Tracks,
-} from './models/track';
+import { TRACK_STATE_OFF, TRACK_STATE_ON, TRACK_STATE_SOLO, Tracks } from './models/track';
 
 // prettier-ignore
 export const demoRhythm: Tracks = [
@@ -36,14 +31,14 @@ export const demoRhythm: Tracks = [
     'hh1',
     'Hihat_Brazil02.wav',
     TRACK_STATE_ON,
-    1,
+    0.8,
     [ 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1 ],
   ],
   [
     'hh2',
     'Hihat_Brazil01.wav',
     TRACK_STATE_ON,
-    1,
+    0.5,
     [ 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 ],
   ],
   [
@@ -78,21 +73,21 @@ export const demoRhythm: Tracks = [
     'vox',
     'VoxDelay2_FX.wav',
     TRACK_STATE_ON,
-    1,
+    0.5,
     [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
   [
     'd# pad1',
     'Dmaj_ChasmPadHit.wav',
     TRACK_STATE_ON,
-    1,
+    0.6,
     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
   [
     'd# pad2',
     'Dmaj_TailnicePadHit.wav',
     TRACK_STATE_ON,
-    1,
+    0.6,
     [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, ],
   ],
 ];
