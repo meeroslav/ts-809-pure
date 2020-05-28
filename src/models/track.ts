@@ -2,6 +2,7 @@ export type TrackSequence = number[];
 
 type TrackUrl = string;
 type TrackNick = string;
+type TrackVolume = number;
 
 export type TrackStateOFF = 0;
 export type TrackStateON = 1;
@@ -16,12 +17,14 @@ export type Track = [
   TrackNick,
   TrackUrl,
   TrackState,
+  TrackVolume,
   TrackSequence
 ];
 
 export const TRACK_NICK = 0;
 export const TRACK_URL = 1;
 export const TRACK_STATE = 2;
-export const TRACK_SEQ = 3;
+export const TRACK_VOLUME = 3;
+export const TRACK_SEQ = 4;
 
 export type Tracks = Track[];
