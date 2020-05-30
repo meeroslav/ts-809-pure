@@ -18,7 +18,7 @@ const BPM_MINUTE = 60000 / 4;
 let bpm = 168;
 let playState = false;
 let playingInterval: number;
-let playPosition = 0;
+let playPosition = -1; // out of bounds
 let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 let sequenceLength = 16;
@@ -36,11 +36,13 @@ const togglePlay = () => {
   } else {
     toggleBtnEl.innerHTML = 'Play';
     clearInterval(playingInterval);
-
-    playPosition = 0;
-    highlightTrackStep(playPosition);
-    renderInfo();
+    setPosition(-1);
   }
+};
+
+const setPosition = (newPosition: number) => {
+  playPosition = newPosition;
+  highlightPosition(playPosition);
 };
 
 const init = async () => {
@@ -65,7 +67,7 @@ const renderTracks = () => {
   }, '');
 };
 
-const highlightTrackStep = (position: number) => {
+const highlightPosition = (position: number) => {
   tracksEl.childNodes.forEach(track => {
     track.childNodes.forEach(step => removeClass(step as HTMLSpanElement, 'step-highlight'));
     addClass(track.childNodes[position + 1] as HTMLSpanElement, 'step-highlight');
@@ -78,11 +80,11 @@ const renderInfo = () => {
    `;
 };
 
-const startPlaying = (tracks: Tracks) =>
-  setInterval(() => {
-    highlightTrackStep(playPosition);
-    const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
+const startPlaying = (tracks: Tracks) => {
+  const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
+  return setInterval(() => {
     if (audioContext && buffers) {
+      setPosition((playPosition + 1) % sequenceLength);
       const delay = createTrippleDelay(audioContext);
       const lowPassFilter = createLowPass(audioContext);
 
@@ -106,8 +108,8 @@ const startPlaying = (tracks: Tracks) =>
         }
       });
     }
-    playPosition = (playPosition + 1) % sequenceLength;
   }, BPM_MINUTE / bpm);
+};
 
 (window as any).togglePlay = togglePlay;
 
