@@ -9,8 +9,7 @@ import {
   Tracks,
   TRACK_VOLUME,
 } from './models/track';
-import { getContext } from './helpers/audio-context';
-import { loadBuffer } from './helpers/buffer-loader';
+import { getContext, loadBuffer, addClass, removeClass } from './helpers';
 
 const bpm = 168;
 const BPM_MINUTE = 60000 / 4;
@@ -70,22 +69,6 @@ const highlightTrackStep = (position: number) => {
   });
 };
 
-const removeClass = (el: HTMLElement, className: string) => {
-  el.className = el.className.replace(` ${className}`, '');
-};
-
-const addClass = (el: HTMLElement, className: string) => {
-  el.className += ` ${className}`;
-};
-
-const toggleClass = (el: HTMLElement, className: string) => {
-  if (el.className.match(className)) {
-    removeClass(el, className);
-  } else {
-    addClass(el, className);
-  }
-};
-
 const renderInfo = () => {
   infoEl.innerHTML = `
     Position: ${playPosition}<br/>
@@ -99,6 +82,9 @@ const startPlaying = (tracks: Tracks) =>
     highlightTrackStep(playPosition);
     const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
+      const delay = audioContext.createDelay();
+      delay.delayTime.value = 0;
+
       const lowPassFilter = audioContext.createBiquadFilter();
       lowPassFilter.type = 'lowpass';
       lowPassFilter.frequency.value = audioContext.sampleRate / 2;
@@ -118,7 +104,8 @@ const startPlaying = (tracks: Tracks) =>
           source.buffer = buffers[index];
           source.connect(volume);
           volume.connect(lowPassFilter);
-          lowPassFilter.connect(audioContext.destination);
+          lowPassFilter.connect(delay);
+          delay.connect(audioContext.destination);
           source.start();
         }
       });
