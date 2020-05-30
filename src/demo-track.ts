@@ -5,7 +5,7 @@ export const demoRhythm: Tracks = [
   [
     'kick',
     'Kick_MeloCubic.wav',
-    TRACK_STATE_ON,
+    TRACK_STATE_SOLO,
     1,
     [
       1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
@@ -14,7 +14,7 @@ export const demoRhythm: Tracks = [
   [
     'snare',
     'Snare_MeloCubic.wav',
-    TRACK_STATE_ON,
+    TRACK_STATE_SOLO,
     1,
     [
       0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,

@@ -9,21 +9,24 @@ import {
   Tracks,
   TRACK_VOLUME,
 } from './models/track';
-import { getContext, loadBuffer, addClass, removeClass } from './helpers';
+import { getContext, loadBuffer, addClass, removeClass, createLowPass, createGain } from './helpers';
+import { createTrippleDelay } from './helpers/audio-filters';
 
-const bpm = 168;
 const BPM_MINUTE = 60000 / 4;
 
+// Control variables
+let bpm = 168;
 let playState = false;
 let playingInterval: number;
 let playPosition = 0;
 let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 let sequenceLength = 16;
-const toggleBtnEl: HTMLElement = document.getElementById('toggle') || new HTMLElement();
-const infoEl: HTMLElement = document.getElementById('info') || new HTMLElement();
-const tracksEl: HTMLElement = document.getElementById('tracks') || new HTMLElement();
-toggleBtnEl.innerHTML = 'Play';
+
+// DOM Elements
+const toggleBtnEl: HTMLElement = document.getElementById('toggle');
+const infoEl: HTMLElement = document.getElementById('info');
+const tracksEl: HTMLElement = document.getElementById('tracks');
 
 const togglePlay = () => {
   playState = !playState;
@@ -82,12 +85,8 @@ const startPlaying = (tracks: Tracks) =>
     highlightTrackStep(playPosition);
     const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
-      const delay = audioContext.createDelay();
-      delay.delayTime.value = 0;
-
-      const lowPassFilter = audioContext.createBiquadFilter();
-      lowPassFilter.type = 'lowpass';
-      lowPassFilter.frequency.value = audioContext.sampleRate / 2;
+      const delay = createTrippleDelay(audioContext);
+      const lowPassFilter = createLowPass(audioContext);
 
       tracks.forEach((track, index) => {
         if (track[TRACK_STATE] === TRACK_STATE_OFF) {
@@ -99,8 +98,7 @@ const startPlaying = (tracks: Tracks) =>
         if (track[TRACK_SEQ][playPosition]) {
           // PLAY SOUND
           const source = audioContext.createBufferSource();
-          const volume = audioContext.createGain();
-          volume.gain.value = track[TRACK_VOLUME];
+          const volume = createGain(audioContext, track[TRACK_VOLUME]);
           source.buffer = buffers[index];
           source.connect(volume);
           volume.connect(lowPassFilter);
