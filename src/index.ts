@@ -74,14 +74,12 @@ const highlightTrackStep = (position: number) => {
 
 const renderInfo = () => {
   infoEl.innerHTML = `
-    Position: ${playPosition}<br/>
-    BPM: ${bpm}
+    BPM: <b>${bpm}</b>
    `;
 };
 
 const startPlaying = (tracks: Tracks) =>
   setInterval(() => {
-    renderInfo();
     highlightTrackStep(playPosition);
     const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
