@@ -23,6 +23,10 @@ let playingInterval: number;
 let playPosition = -1; // out of bounds
 let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
+let master: GainNode;
+let output: GainNode;
+let delay: AudioNode;
+let lowPassFilter: AudioNode;
 let sequenceLength = 16;
 
 // DOM Elements
@@ -50,11 +54,21 @@ const setPosition = (newPosition: number) => {
 const init = async () => {
   // get context buffer
   audioContext = getContext();
+  // create master effects
+  master = audioContext.createGain();
+  delay = createTrippleDelay(audioContext);
+  lowPassFilter = createLowPass(audioContext);
+  output = audioContext.createGain();
+  output.gain.value = 0.8;
+  master.connect(delay);
+  delay.connect(lowPassFilter);
+  lowPassFilter.connect(output);
+  output.connect(audioContext.destination);
   // load buffers
   sequenceLength = demoRhythm.length && demoRhythm[0][TRACK_SEQ].length;
   buffers = await demoRhythm
     .map(track => loadBuffer(`samples/${track[TRACK_URL]}`, audioContext))
-    .reduce(async (prev, next, index) => {
+    .reduce(async (prev, next) => {
       const nextBuffer = await next;
       return [...(await prev), nextBuffer];
     }, Promise.resolve([]));
@@ -125,7 +139,10 @@ const highlightPosition = (position: number) => {
 
 const renderInfo = () => {
   infoEl.innerHTML = `
-    BPM: <b>${bpm}</b>
+    BPM: <b>${bpm}</b><br/>
+    Volume: <b>${~~(output.gain.value * 100)}%</b><br/>
+    LowPass freq: <b>${lowPassFilter.frequency.value}Hz</b><br/>
+    Delay: <b>${delay.time}ms / ${~~(delay.volume * 100)}% volume</b>
    `;
 };
 
@@ -134,8 +151,6 @@ const startPlaying = (tracks: Tracks) => {
     const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
       setPosition((playPosition + 1) % sequenceLength);
-      const delay = createTrippleDelay(audioContext);
-      const lowPassFilter = createLowPass(audioContext);
 
       tracks.forEach((track, index) => {
         if (track[TRACK_STATE] === TRACK_STATE_OFF) {
@@ -150,9 +165,7 @@ const startPlaying = (tracks: Tracks) => {
           const volume = createGain(audioContext, track[TRACK_VOLUME]);
           source.buffer = buffers[index];
           source.connect(volume);
-          volume.connect(lowPassFilter);
-          lowPassFilter.connect(delay);
-          delay.connect(audioContext.destination);
+          volume.connect(master);
           source.start();
         }
       });
