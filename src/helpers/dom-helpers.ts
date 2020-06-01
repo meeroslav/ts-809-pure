@@ -13,3 +13,20 @@ export const toggleClass = (el: HTMLElement, className: string) => {
     addClass(el, className);
   }
 };
+
+export const createEl = (type: string, className: string = '', innerText: string = ''): HTMLElement => {
+  const el: HTMLElement = document.createElement(type);
+  el.setAttribute('class', className);
+  el.innerText = innerText;
+  return el;
+};
+
+export const createBtn = (title: string, text: string, className: string, callback: () => void): HTMLButtonElement => {
+  const el: HTMLButtonElement = document.createElement('button');
+  el.setAttribute('type', 'button');
+  el.setAttribute('title', title);
+  el.setAttribute('class', className);
+  el.innerText = text;
+  el.onclick = callback;
+  return el;
+};

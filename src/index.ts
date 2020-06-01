@@ -10,8 +10,9 @@ import {
   Tracks,
   TRACK_VOLUME,
 } from './models/track';
-import { getContext, loadBuffer, addClass, removeClass, createLowPass, createGain } from './helpers';
+import { getContext, loadBuffer, addClass, removeClass, createLowPass, createGain, createEl } from './helpers';
 import { createTrippleDelay } from './helpers/audio-filters';
+import { createBtn } from './helpers/dom-helpers';
 
 const BPM_MINUTE = 60000 / 4;
 
@@ -63,56 +64,46 @@ const init = async () => {
 
 const renderTracks = () => {
   demoRhythm.forEach(track => {
-    const trackEl = document.createElement('div');
-    trackEl.setAttribute('class', 'track');
+    const trackEl = createEl('div', 'track');
     // trackInfo element
-    const trackInfoEl = document.createElement('div');
-    trackInfoEl.setAttribute('class', 'track-info');
-    const nickEl = document.createElement('span');
-    nickEl.setAttribute('class', 'track-name');
-    nickEl.innerText = track[TRACK_NICK];
+    const trackInfoEl = createEl('div', 'track-info');
+    const nickEl = createEl('span', 'track-name', track[TRACK_NICK]);
     trackInfoEl.appendChild(nickEl);
-    const muteEl = document.createElement('button');
-    muteEl.setAttribute('type', 'button');
-    muteEl.setAttribute('title', 'Mute');
-    muteEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`);
-    muteEl.innerText = 'M';
-    muteEl.onclick = () => {
-      track[TRACK_STATE] = TRACK_STATE_OFF;
-      muteEl.setAttribute('class', 'track-status track-off');
-      onEl.setAttribute('class', 'track-status');
-      soloEl.setAttribute('class', 'track-status');
-    };
+    const muteEl = createBtn(
+      'Mute',
+      'M',
+      `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`,
+      () => {
+        track[TRACK_STATE] = TRACK_STATE_OFF;
+        muteEl.setAttribute('class', 'track-status track-off');
+        onEl.setAttribute('class', 'track-status');
+        soloEl.setAttribute('class', 'track-status');
+      }
+    );
     trackInfoEl.appendChild(muteEl);
-    const onEl = document.createElement('button');
-    onEl.setAttribute('type', 'button');
-    onEl.setAttribute('title', 'On');
-    onEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''}`);
-    onEl.innerText = 'O';
-    onEl.onclick = () => {
+    const onEl = createBtn('On', 'O', `track-status${track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''}`, () => {
       track[TRACK_STATE] = TRACK_STATE_ON;
       muteEl.setAttribute('class', 'track-status');
       onEl.setAttribute('class', 'track-status track-on');
       soloEl.setAttribute('class', 'track-status');
-    };
+    });
     trackInfoEl.appendChild(onEl);
-    const soloEl = document.createElement('button');
-    soloEl.setAttribute('type', 'button');
-    soloEl.setAttribute('title', 'Solo');
-    soloEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-solo' : ''}`);
-    soloEl.innerText = 'S';
-    soloEl.onclick = () => {
-      track[TRACK_STATE] = TRACK_STATE_SOLO;
-      muteEl.setAttribute('class', 'track-status');
-      onEl.setAttribute('class', 'track-status');
-      soloEl.setAttribute('class', 'track-status track-solo');
-    };
+    const soloEl = createBtn(
+      'Solo',
+      'S',
+      `track-status${track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-solo' : ''}`,
+      () => {
+        track[TRACK_STATE] = TRACK_STATE_SOLO;
+        muteEl.setAttribute('class', 'track-status');
+        onEl.setAttribute('class', 'track-status');
+        soloEl.setAttribute('class', 'track-status track-solo');
+      }
+    );
     trackInfoEl.appendChild(soloEl);
     trackEl.appendChild(trackInfoEl);
 
     track[TRACK_SEQ].forEach(step => {
-      const stepEl = document.createElement('span');
-      stepEl.setAttribute('class', step ? 'step-on' : 'step-off');
+      const stepEl = createEl('span', step ? 'step-on' : 'step-off');
       trackEl.appendChild(stepEl);
     });
 
