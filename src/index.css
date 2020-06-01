@@ -3,11 +3,12 @@
   --font-size: 1rem;
   --cl-fg: #323232;
   --cl-action-bg: #43849f;
-  --cl-action-fg: #efefef;
+  --cl-action-fg: #fff;
   --cl-border: #c8c8c8;
   --cl-focus: #43849f;
   --cl-error: #9f4343;
   --cl-highlight: #6b9f38;
+  --cl-track-bg: #efefef;
   --spacing: 0.5rem;
   --spacing-sm: 0.25rem;
   --btn-spacing: 0.5rem 1rem;
@@ -44,6 +45,9 @@ html {
 
 .track {
   margin-bottom: var(--spacing);
+  border: var(--border);
+  padding: var(--spacing-sm);
+  background: var(--cl-track-bg);
 }
 
 .track-info {
@@ -64,6 +68,7 @@ html {
   padding: var(--spacing-sm);
   margin-right: var(--spacing-sm);
   border: var(--border);
+  background: var(--cl-action-fg);
 }
 .track-on {
   background: var(--cl-highlight);
@@ -77,6 +82,7 @@ html {
 
 .step-on,
 .step-off {
+  background: var(--cl-action-fg);
   display: inline-block;
   padding: calc(var(--spacing) * 2) var(--spacing);
   margin-right: var(--spacing-sm);
