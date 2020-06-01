@@ -4,6 +4,7 @@
   --cl-fg: #323232;
   --cl-action-bg: #43849f;
   --cl-action-fg: #fff;
+  --cl-secondary-action-bg: #fff;
   --cl-border: #c8c8c8;
   --cl-focus: #43849f;
   --cl-error: #9f4343;
@@ -52,37 +53,42 @@ html {
 
 .track-info {
   line-height: 1;
+  display: flex;
+  margin-bottom: var(--spacing-sm);
 }
 
 .track-name {
-  display: inline-block;
   width: var(--track-name-w);
   overflow: hidden;
   padding: var(--spacing-sm);
   text-overflow: ellipsis;
   margin-right: var(--spacing-sm);
+  background: var(--cl-secondary-action-bg);
 }
 
 .track-status {
-  display: inline-block;
   padding: var(--spacing-sm);
-  margin-right: var(--spacing-sm);
   border: var(--border);
-  background: var(--cl-action-fg);
+  background: var(--cl-secondary-action-bg);
+  cursor: pointer;
 }
 .track-on {
   background: var(--cl-highlight);
+  color: var(--cl-action-fg);
 }
 .track-off {
   background: var(--cl-error);
+  color: var(--cl-action-fg);
 }
 .track-solo {
   background: var(--cl-focus);
+  color: var(--cl-action-fg);
 }
 
 .step-on,
 .step-off {
-  background: var(--cl-action-fg);
+  border-radius: var(--border-radius);
+  background: var(--cl-secondary-action-bg);
   display: inline-block;
   padding: calc(var(--spacing) * 2) var(--spacing);
   margin-right: var(--spacing-sm);
