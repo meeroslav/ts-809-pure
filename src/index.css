@@ -26,6 +26,11 @@ html {
   padding: var(--spacing);
 }
 
+button {
+  cursor: pointer;
+  border: none;
+}
+
 .action_btn {
   background: var(--cl-action-bg);
   color: var(--cl-action-fg);
@@ -33,7 +38,6 @@ html {
   border: none;
   border-radius: var(--border-radius);
   font-size: var(--font-size);
-  cursor: pointer;
 }
 
 #info {
@@ -70,7 +74,6 @@ html {
   padding: var(--spacing-sm);
   border: var(--border);
   background: var(--cl-secondary-action-bg);
-  cursor: pointer;
 }
 .track-on {
   background: var(--cl-highlight);

@@ -102,8 +102,11 @@ const renderTracks = () => {
     trackInfoEl.appendChild(soloEl);
     trackEl.appendChild(trackInfoEl);
 
-    track[TRACK_SEQ].forEach(step => {
-      const stepEl = createEl('span', step ? 'step-on' : 'step-off');
+    track[TRACK_SEQ].forEach((step, index) => {
+      const stepEl = createBtn((index + 1).toString(), '', step ? 'step-on' : 'step-off', () => {
+        track[TRACK_SEQ][index] ^= 1;
+        stepEl.setAttribute('class', track[TRACK_SEQ][index] ? 'step-on' : 'step-off');
+      });
       trackEl.appendChild(stepEl);
     });
 
