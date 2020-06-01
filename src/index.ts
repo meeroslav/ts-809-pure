@@ -63,7 +63,7 @@ const init = async () => {
 const renderTracks = () => {
   tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
     const trackSteps = track[TRACK_SEQ].map(step => `<span class="${step ? 'step-on' : 'step-off'}"></span>`).join('');
-    return `${acc}<div class='track'><span class='track-name'>${track[TRACK_NICK]}</span>${trackSteps}</div>`;
+    return `${acc}<div class='track'><div class='track-name'>${track[TRACK_NICK]}</div>${trackSteps}</div>`;
   }, '');
 };
 

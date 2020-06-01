@@ -46,7 +46,6 @@ html {
 }
 
 .track-name {
-  display: inline-block;
   width: var(--track-name-w);
   overflow: hidden;
   padding: var(--spacing-sm);
