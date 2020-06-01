@@ -6,6 +6,7 @@
   --cl-action-fg: #efefef;
   --cl-border: #c8c8c8;
   --cl-focus: #43849f;
+  --cl-error: #9f4343;
   --cl-highlight: #6b9f38;
   --spacing: 0.5rem;
   --spacing-sm: 0.25rem;
@@ -45,14 +46,33 @@ html {
   margin-bottom: var(--spacing);
 }
 
+.track-info {
+  line-height: 1;
+}
+
 .track-name {
+  display: inline-block;
   width: var(--track-name-w);
   overflow: hidden;
   padding: var(--spacing-sm);
-  line-height: 1;
   text-overflow: ellipsis;
   margin-right: var(--spacing-sm);
-  border-bottom: var(--border);
+}
+
+.track-status {
+  display: inline-block;
+  padding: var(--spacing-sm);
+  margin-right: var(--spacing-sm);
+  border: var(--border);
+}
+.track-on {
+  background: var(--cl-highlight);
+}
+.track-off {
+  background: var(--cl-error);
+}
+.track-solo {
+  background: var(--cl-focus);
 }
 
 .step-on,

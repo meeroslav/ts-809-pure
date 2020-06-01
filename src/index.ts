@@ -5,6 +5,7 @@ import {
   TRACK_STATE,
   TRACK_STATE_OFF,
   TRACK_STATE_SOLO,
+  TRACK_STATE_ON,
   TRACK_URL,
   Tracks,
   TRACK_VOLUME,
@@ -63,7 +64,15 @@ const init = async () => {
 const renderTracks = () => {
   tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
     const trackSteps = track[TRACK_SEQ].map(step => `<span class="${step ? 'step-on' : 'step-off'}"></span>`).join('');
-    return `${acc}<div class='track'><div class='track-name'>${track[TRACK_NICK]}</div>${trackSteps}</div>`;
+    const muteStatus = `<span class='track-status${
+      track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''
+    }'>M</span>`;
+    const playStatus = `<span class='track-status${track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''}'>P</span>`;
+    const soloStatus = `<span class='track-status${
+      track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-off' : ''
+    }'>S</span>`;
+    const trackInfo = `<span class='track-name'>${track[TRACK_NICK]}</span>${muteStatus}${playStatus}${soloStatus}`;
+    return `${acc}<div class='track'><div class='track-info'>${trackInfo}</div>${trackSteps}</div>`;
   }, '');
 };
 
