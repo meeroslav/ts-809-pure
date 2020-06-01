@@ -57,31 +57,75 @@ const init = async () => {
       const nextBuffer = await next;
       return [...(await prev), nextBuffer];
     }, Promise.resolve([]));
-  togglePlay();
+  renderInfo();
   renderTracks();
 };
 
 const renderTracks = () => {
-  tracksEl.innerHTML = demoRhythm.reduce((acc, track) => {
-    const trackSteps = track[TRACK_SEQ].map(step => `<span class="${step ? 'step-on' : 'step-off'}"></span>`).join('');
-    const muteStatus = `<button type="button" class='track-status${
-      track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''
-    }' title="Mute">M</button>`;
-    const playStatus = `<button type="button" class='track-status${
-      track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''
-    }' title="On">O</button>`;
-    const soloStatus = `<button type="button" class='track-status${
-      track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-solo' : ''
-    }' title="Solo">S</button>`;
-    const trackInfo = `<span class='track-name'>${track[TRACK_NICK]}</span>${muteStatus}${playStatus}${soloStatus}`;
-    return `${acc}<div class='track'><div class='track-info'>${trackInfo}</div>${trackSteps}</div>`;
-  }, '');
+  demoRhythm.forEach(track => {
+    const trackEl = document.createElement('div');
+    trackEl.setAttribute('class', 'track');
+    // trackInfo element
+    const trackInfoEl = document.createElement('div');
+    trackInfoEl.setAttribute('class', 'track-info');
+    const nickEl = document.createElement('span');
+    nickEl.setAttribute('class', 'track-name');
+    nickEl.innerText = track[TRACK_NICK];
+    trackInfoEl.appendChild(nickEl);
+    const muteEl = document.createElement('button');
+    muteEl.setAttribute('type', 'button');
+    muteEl.setAttribute('title', 'Mute');
+    muteEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`);
+    muteEl.innerText = 'M';
+    muteEl.onclick = () => {
+      track[TRACK_STATE] = TRACK_STATE_OFF;
+      muteEl.setAttribute('class', 'track-status track-off');
+      onEl.setAttribute('class', 'track-status');
+      soloEl.setAttribute('class', 'track-status');
+    };
+    trackInfoEl.appendChild(muteEl);
+    const onEl = document.createElement('button');
+    onEl.setAttribute('type', 'button');
+    onEl.setAttribute('title', 'On');
+    onEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''}`);
+    onEl.innerText = 'O';
+    onEl.onclick = () => {
+      track[TRACK_STATE] = TRACK_STATE_ON;
+      muteEl.setAttribute('class', 'track-status');
+      onEl.setAttribute('class', 'track-status track-on');
+      soloEl.setAttribute('class', 'track-status');
+    };
+    trackInfoEl.appendChild(onEl);
+    const soloEl = document.createElement('button');
+    soloEl.setAttribute('type', 'button');
+    soloEl.setAttribute('title', 'Solo');
+    soloEl.setAttribute('class', `track-status${track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-solo' : ''}`);
+    soloEl.innerText = 'S';
+    soloEl.onclick = () => {
+      track[TRACK_STATE] = TRACK_STATE_SOLO;
+      muteEl.setAttribute('class', 'track-status');
+      onEl.setAttribute('class', 'track-status');
+      soloEl.setAttribute('class', 'track-status track-solo');
+    };
+    trackInfoEl.appendChild(soloEl);
+    trackEl.appendChild(trackInfoEl);
+
+    track[TRACK_SEQ].forEach(step => {
+      const stepEl = document.createElement('span');
+      stepEl.setAttribute('class', step ? 'step-on' : 'step-off');
+      trackEl.appendChild(stepEl);
+    });
+
+    tracksEl.appendChild(trackEl);
+  });
 };
 
 const highlightPosition = (position: number) => {
   tracksEl.childNodes.forEach(track => {
     track.childNodes.forEach(step => removeClass(step as HTMLSpanElement, 'step-highlight'));
-    addClass(track.childNodes[position + 1] as HTMLSpanElement, 'step-highlight');
+    if (position >= 0) {
+      addClass(track.childNodes[position + 1] as HTMLSpanElement, 'step-highlight');
+    }
   });
 };
 
@@ -92,8 +136,8 @@ const renderInfo = () => {
 };
 
 const startPlaying = (tracks: Tracks) => {
-  const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
   return setInterval(() => {
+    const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
       setPosition((playPosition + 1) % sequenceLength);
       const delay = createTrippleDelay(audioContext);
