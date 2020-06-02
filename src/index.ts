@@ -10,8 +10,17 @@ import {
   Tracks,
   TRACK_VOLUME,
 } from './models/track';
-import { getContext, loadBuffer, addClass, removeClass, createLowPass, createGain, createEl } from './helpers';
-import { createTrippleDelay } from './helpers/audio-filters';
+import {
+  getContext,
+  loadBuffer,
+  addClass,
+  removeClass,
+  createLowPass,
+  createGain,
+  createEl,
+  createTrippleDelay,
+  TrippleDelayNode,
+} from './helpers';
 import { createBtn } from './helpers/dom-helpers';
 
 const BPM_MINUTE = 60000 / 4;
@@ -25,8 +34,8 @@ let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 let master: GainNode;
 let output: GainNode;
-let delay: AudioNode;
-let lowPassFilter: AudioNode;
+let delay: TrippleDelayNode;
+let lowPassFilter: BiquadFilterNode;
 let sequenceLength = 16;
 
 // DOM Elements
