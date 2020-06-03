@@ -30,3 +30,13 @@ export const createBtn = (title: string, text: string, className: string, callba
   el.onclick = callback;
   return el;
 };
+
+export const createRange = (callback: (value: number) => void, max = 100, min = 0, step = 1): HTMLInputElement => {
+  const el: HTMLInputElement = document.createElement('input');
+  el.setAttribute('type', 'range');
+  el.setAttribute('min', min.toString());
+  el.setAttribute('max', max.toString());
+  el.setAttribute('step', step.toString());
+  el.oninput = (e: Event) => callback((e.target as HTMLInputElement).valueAsNumber);
+  return el;
+};

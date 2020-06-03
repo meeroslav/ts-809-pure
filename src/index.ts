@@ -21,7 +21,7 @@ import {
   createTrippleDelay,
   TrippleDelayNode,
 } from './helpers';
-import { createBtn } from './helpers/dom-helpers';
+import { createBtn, createRange } from './helpers/dom-helpers';
 
 const BPM_MINUTE = 60000 / 4;
 
@@ -97,32 +97,36 @@ const renderTracks = () => {
       'M',
       `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`,
       () => {
-        track[TRACK_STATE] = TRACK_STATE_OFF;
-        muteEl.setAttribute('class', 'track-status track-off');
-        onEl.setAttribute('class', 'track-status');
-        soloEl.setAttribute('class', 'track-status');
+        if (track[TRACK_STATE] === TRACK_STATE_OFF) {
+          track[TRACK_STATE] = TRACK_STATE_ON;
+          muteEl.setAttribute('class', 'track-status');
+        } else {
+          track[TRACK_STATE] = TRACK_STATE_OFF;
+          muteEl.setAttribute('class', 'track-status track-off');
+          soloEl.setAttribute('class', 'track-status');
+        }
       }
     );
     trackInfoEl.appendChild(muteEl);
-    const onEl = createBtn('On', 'O', `track-status${track[TRACK_STATE] === TRACK_STATE_ON ? ' track-on' : ''}`, () => {
-      track[TRACK_STATE] = TRACK_STATE_ON;
-      muteEl.setAttribute('class', 'track-status');
-      onEl.setAttribute('class', 'track-status track-on');
-      soloEl.setAttribute('class', 'track-status');
-    });
-    trackInfoEl.appendChild(onEl);
     const soloEl = createBtn(
       'Solo',
       'S',
       `track-status${track[TRACK_STATE] === TRACK_STATE_SOLO ? ' track-solo' : ''}`,
       () => {
-        track[TRACK_STATE] = TRACK_STATE_SOLO;
-        muteEl.setAttribute('class', 'track-status');
-        onEl.setAttribute('class', 'track-status');
-        soloEl.setAttribute('class', 'track-status track-solo');
+        if (track[TRACK_STATE] === TRACK_STATE_SOLO) {
+          track[TRACK_STATE] = TRACK_STATE_ON;
+          soloEl.setAttribute('class', 'track-status');
+        } else {
+          track[TRACK_STATE] = TRACK_STATE_SOLO;
+          muteEl.setAttribute('class', 'track-status');
+          soloEl.setAttribute('class', 'track-status track-solo');
+        }
       }
     );
     trackInfoEl.appendChild(soloEl);
+    const volumeEl = createRange(value => (track[TRACK_VOLUME] = value), 1, 0, 0.01);
+    volumeEl.value = track[TRACK_VOLUME].toString();
+    trackInfoEl.appendChild(volumeEl);
     trackEl.appendChild(trackInfoEl);
 
     track[TRACK_SEQ].forEach((step, index) => {
