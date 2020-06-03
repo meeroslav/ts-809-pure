@@ -8,6 +8,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_SOLO,
     1,
     0,
+    0,
     [
       1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
     ],
@@ -17,6 +18,7 @@ export const demoRhythm: Tracks = [
     'Snare_MeloCubic.wav',
     TRACK_STATE_SOLO,
     1,
+    0,
     0,
     [
       0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -28,6 +30,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     1,
     0,
+    0,
     [ 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0 ],
   ],
   [
@@ -35,6 +38,7 @@ export const demoRhythm: Tracks = [
     'Hihat_Brazil02.wav',
     TRACK_STATE_ON,
     0.8,
+    0,
     0,
     [ 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1 ],
   ],
@@ -44,6 +48,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     0.5,
     0,
+    0,
     [ 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 ],
   ],
   [
@@ -51,6 +56,7 @@ export const demoRhythm: Tracks = [
     'Djembe03_FAT.wav',
     TRACK_STATE_ON,
     1,
+    0,
     0,
     [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 ],
   ],
@@ -60,6 +66,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     1,
     0,
+    0,
     [ 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
   [
@@ -67,6 +74,7 @@ export const demoRhythm: Tracks = [
     'Djembe05_FAT.wav',
     TRACK_STATE_ON,
     1,
+    0,
     0,
     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, ],
   ],
@@ -76,6 +84,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     1,
     0,
+    0,
     [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, ],
   ],
   [
@@ -83,6 +92,7 @@ export const demoRhythm: Tracks = [
     'F_FizzyBass01.wav',
     TRACK_STATE_ON,
     1,
+    0,
     0,
     [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
@@ -92,6 +102,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     0.5,
     0,
+    0,
     [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
   [
@@ -100,6 +111,7 @@ export const demoRhythm: Tracks = [
     TRACK_STATE_ON,
     0.6,
     0,
+    0,
     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
   ],
   [
@@ -107,6 +119,7 @@ export const demoRhythm: Tracks = [
     'Dmaj_TailnicePadHit.wav',
     TRACK_STATE_ON,
     0.6,
+    0,
     0,
     [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, ],
   ],

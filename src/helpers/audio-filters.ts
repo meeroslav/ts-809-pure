@@ -4,6 +4,12 @@ export const createGain = (context: AudioContext, volume = 1): GainNode => {
   return filter;
 };
 
+export const createPanner = (context: AudioContext, pan = 0): StereoPannerNode => {
+  const filter = context.createStereoPanner();
+  filter.pan.value = pan;
+  return filter;
+};
+
 export const createLowPass = (context: AudioContext, frequency?: number): BiquadFilterNode => {
   const filter = context.createBiquadFilter();
   filter.type = 'lowpass';

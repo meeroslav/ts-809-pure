@@ -70,6 +70,10 @@ button {
   background: var(--cl-secondary-action-bg);
 }
 
+.range-info {
+  padding: var(--spacing-sm);
+}
+
 .track-status {
   padding: var(--spacing-sm);
   border: var(--border);

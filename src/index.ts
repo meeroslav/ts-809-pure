@@ -9,6 +9,7 @@ import {
   TRACK_URL,
   Tracks,
   TRACK_VOLUME,
+  TRACK_PAN,
 } from './models/track';
 import {
   getContext,
@@ -20,6 +21,7 @@ import {
   createEl,
   createTrippleDelay,
   TrippleDelayNode,
+  createPanner,
 } from './helpers';
 import { createBtn, createRange } from './helpers/dom-helpers';
 
@@ -124,9 +126,15 @@ const renderTracks = () => {
       }
     );
     trackInfoEl.appendChild(soloEl);
-    const volumeEl = createRange(value => (track[TRACK_VOLUME] = value), 1, 0, 0.01);
+    const volumeEl = createRange(value => (track[TRACK_VOLUME] = value));
     volumeEl.value = track[TRACK_VOLUME].toString();
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'Volume: '));
     trackInfoEl.appendChild(volumeEl);
+    const panEl = createRange(value => (track[TRACK_PAN] = value), 1, -1, 0.01);
+    panEl.value = track[TRACK_PAN].toString();
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'Pan: '));
+    trackInfoEl.appendChild(panEl);
+
     trackEl.appendChild(trackInfoEl);
 
     track[TRACK_SEQ].forEach((step, index) => {
@@ -193,8 +201,10 @@ const startPlaying = (tracks: Tracks) => {
           // PLAY SOUND
           const source = audioContext.createBufferSource();
           const volume = createGain(audioContext, track[TRACK_VOLUME]);
+          const panner = createPanner(audioContext, track[TRACK_PAN]);
           source.buffer = buffers[index];
-          source.connect(volume);
+          source.connect(panner);
+          panner.connect(volume);
           volume.connect(master);
           source.start();
         }
