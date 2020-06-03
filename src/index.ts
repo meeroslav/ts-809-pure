@@ -151,12 +151,29 @@ const highlightPosition = (position: number) => {
 };
 
 const renderInfo = () => {
-  infoEl.innerHTML = `
-    BPM: <b>${bpm}</b><br/>
-    Volume: <b>${~~(output.gain.value * 100)}%</b><br/>
-    LowPass freq: <b>${lowPassFilter.frequency.value}Hz</b><br/>
-    Delay: <b>${delay.time}ms / ${~~(delay.volume * 100)}% volume</b>
-   `;
+  const volumeEl = createRange(value => (output.gain.value = value));
+  volumeEl.value = output.gain.value.toString();
+  const volumeWrapper = createEl('div', '', 'Volume: ');
+  volumeWrapper.appendChild(volumeEl);
+
+  const lowPassEl = createRange(value => (lowPassFilter.frequency.value = value), audioContext.sampleRate / 2, 0, 1);
+  lowPassEl.value = lowPassFilter.frequency.value.toString();
+  const lowPassWrapper = createEl('div', '', 'LowPass freq: ');
+  lowPassWrapper.appendChild(lowPassEl);
+
+  const delayTimeEl = createRange(value => (delay.time = value), 0.5);
+  delayTimeEl.value = delay.time.toString();
+  const delayVolEl = createRange(value => (delay.volume = value));
+  delayVolEl.value = delay.volume.toString();
+  const delayWrapper = createEl('div', '', 'Delay time: ');
+  delayWrapper.appendChild(delayTimeEl);
+  delayWrapper.appendChild(createEl('span', '', 'volume:'));
+  delayWrapper.appendChild(delayVolEl);
+
+  infoEl.innerHTML = `<div>BPM: <b>${bpm}</b></div>`;
+  infoEl.appendChild(volumeWrapper);
+  infoEl.appendChild(lowPassWrapper);
+  infoEl.appendChild(delayWrapper);
 };
 
 const startPlaying = (tracks: Tracks) => {
