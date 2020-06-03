@@ -10,6 +10,7 @@ import {
   Tracks,
   TRACK_VOLUME,
   TRACK_PAN,
+  TRACK_PITCH,
 } from './models/track';
 import {
   getContext,
@@ -126,14 +127,43 @@ const renderTracks = () => {
       }
     );
     trackInfoEl.appendChild(soloEl);
-    const volumeEl = createRange(value => (track[TRACK_VOLUME] = value));
+    const volumeEl = createRange(value => {
+      track[TRACK_VOLUME] = value;
+      volumeVal.innerText = value * 100 + '%';
+    });
     volumeEl.value = track[TRACK_VOLUME].toString();
+    const volumeVal = createEl('span', 'range-info', track[TRACK_VOLUME] * 100 + '%');
     trackInfoEl.appendChild(createEl('span', 'range-info', 'Volume: '));
     trackInfoEl.appendChild(volumeEl);
-    const panEl = createRange(value => (track[TRACK_PAN] = value), 1, -1, 0.01);
+    trackInfoEl.appendChild(volumeVal);
+    const panEl = createRange(
+      value => {
+        track[TRACK_PAN] = value;
+        panVal.innerText = value * 100 + '%';
+      },
+      1,
+      -1,
+      0.01
+    );
     panEl.value = track[TRACK_PAN].toString();
+    const panVal = createEl('span', 'range-info', track[TRACK_PAN] * 100 + '%');
     trackInfoEl.appendChild(createEl('span', 'range-info', 'Pan: '));
     trackInfoEl.appendChild(panEl);
+    trackInfoEl.appendChild(panVal);
+    const pitchEl = createRange(
+      value => {
+        track[TRACK_PITCH] = value;
+        pitchVal.innerText = value.toString();
+      },
+      12,
+      -12,
+      1
+    );
+    pitchEl.value = track[TRACK_PAN].toString();
+    const pitchVal = createEl('span', 'range-info', track[TRACK_PAN].toString());
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'Pitch: '));
+    trackInfoEl.appendChild(pitchEl);
+    trackInfoEl.appendChild(pitchVal);
 
     trackEl.appendChild(trackInfoEl);
 
@@ -203,10 +233,11 @@ const startPlaying = (tracks: Tracks) => {
           const volume = createGain(audioContext, track[TRACK_VOLUME]);
           const panner = createPanner(audioContext, track[TRACK_PAN]);
           source.buffer = buffers[index];
+          source.detune.value = track[TRACK_PITCH] * 100;
           source.connect(panner);
           panner.connect(volume);
           volume.connect(master);
-          source.start();
+          source.start(0);
         }
       });
     }
