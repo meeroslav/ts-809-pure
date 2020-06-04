@@ -20,11 +20,13 @@ import {
   createLowPass,
   createGain,
   createEl,
-  createTrippleDelay,
-  TrippleDelayNode,
+  createEcho,
+  EchoNode,
   createPanner,
 } from './helpers';
 import { createBtn, createRange } from './helpers/dom-helpers';
+
+import './test.css';
 
 const BPM_MINUTE = 60000 / 4;
 
@@ -37,7 +39,7 @@ let buffers: AudioBuffer[] = [];
 let audioContext: AudioContext;
 let master: GainNode;
 let output: GainNode;
-let delay: TrippleDelayNode;
+let delay: EchoNode;
 let lowPassFilter: BiquadFilterNode;
 let sequenceLength = 16;
 
@@ -68,7 +70,7 @@ const init = async () => {
   audioContext = getContext();
   // create master effects
   master = audioContext.createGain();
-  delay = createTrippleDelay(audioContext);
+  delay = createEcho(audioContext);
   lowPassFilter = createLowPass(audioContext);
   output = audioContext.createGain();
   output.gain.value = 0.8;

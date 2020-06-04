@@ -17,12 +17,12 @@ export const createLowPass = (context: AudioContext, frequency?: number): Biquad
   return filter;
 };
 
-export interface TrippleDelayNode extends AudioNode {
+export interface EchoNode extends AudioNode {
   time: number;
   volume: number;
 }
 
-export const createTrippleDelay = (context: AudioContext, time = 0, volume = 0.15): TrippleDelayNode => {
+export const createEcho = (context: AudioContext, time = 0, volume = 0.15): EchoNode => {
   const input = context.createGain();
   const output = context.createGain();
   const delay1 = context.createDelay();
@@ -81,5 +81,5 @@ export const createTrippleDelay = (context: AudioContext, time = 0, volume = 0.1
     return;
   };
 
-  return (input as any) as TrippleDelayNode;
+  return (input as any) as EchoNode;
 };
