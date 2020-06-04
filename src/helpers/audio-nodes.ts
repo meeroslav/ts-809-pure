@@ -18,59 +18,39 @@ export const createLowPass = (context: AudioContext, frequency?: number): Biquad
 };
 
 export interface EchoNode extends AudioNode {
-  time: number;
-  volume: number;
+  time: AudioParam;
+  volume: AudioParam;
 }
 
 export const createEcho = (context: AudioContext, time = 0, volume = 0.15): EchoNode => {
   const input = context.createGain();
   const output = context.createGain();
-  const delay1 = context.createDelay();
-  const delay1Gain = context.createGain();
-  const delay2 = context.createDelay();
-  const delay2Gain = context.createGain();
-  const delay3 = context.createDelay();
-  const delay3Gain = context.createGain();
+  const delay = context.createDelay();
+  const delayGain = context.createGain();
   // connect sources
   input.connect(output);
-  input.connect(delay1);
-  delay1.connect(delay1Gain);
-  delay1Gain.connect(output);
-  delay1Gain.connect(delay2);
-  delay2.connect(delay2Gain);
-  delay2Gain.connect(output);
-  delay2Gain.connect(delay3);
-  delay3.connect(delay3Gain);
-  delay3Gain.connect(output);
-
-  let delayTime: number;
-  let delayVolume: number;
+  input.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(output);
+  delayGain.connect(delay);
 
   const setTime = (newTime: number) => {
-    delayTime = newTime;
-    delay1.delayTime.value = delayTime;
-    delay2.delayTime.value = delayTime;
-    delay3.delayTime.value = delayTime;
+    delay.delayTime.value = newTime;
   };
 
   const setVolume = (newVolume: number) => {
-    delayVolume = newVolume;
-    delay1Gain.gain.value = delayVolume;
-    delay2Gain.gain.value = delayVolume;
-    delay3Gain.gain.value = delayVolume;
+    delayGain.gain.value = newVolume;
   };
 
   setTime(time);
   setVolume(volume);
 
   Object.defineProperty(input, 'time', {
-    get: () => delayTime,
-    set: (newTime: number) => setTime(newTime),
+    get: () => delay.delayTime,
   });
 
   Object.defineProperty(input, 'volume', {
-    get: () => delayVolume,
-    set: (newVolume: number) => setVolume(newVolume),
+    get: () => delayGain.gain,
   });
 
   input.connect = (destination: AudioParam | AudioNode) => {

@@ -201,10 +201,10 @@ const renderInfo = () => {
   const lowPassWrapper = createEl('div', '', 'LowPass freq: ');
   lowPassWrapper.appendChild(lowPassEl);
 
-  const delayTimeEl = createRange(value => (delay.time = value), 0.5);
-  delayTimeEl.value = delay.time.toString();
-  const delayVolEl = createRange(value => (delay.volume = value));
-  delayVolEl.value = delay.volume.toString();
+  const delayTimeEl = createRange(value => (delay.time.value = value), 0.5);
+  delayTimeEl.value = delay.time.value.toString();
+  const delayVolEl = createRange(value => (delay.volume.value = value));
+  delayVolEl.value = delay.volume.value.toString();
   const delayWrapper = createEl('div', '', 'Delay time: ');
   delayWrapper.appendChild(delayTimeEl);
   delayWrapper.appendChild(createEl('span', '', 'volume:'));
