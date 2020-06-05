@@ -3,7 +3,9 @@ export const removeClass = (el: HTMLElement, className: string) => {
 };
 
 export const addClass = (el: HTMLElement, className: string) => {
-  el.className += ` ${className}`;
+  if (!el.className.match(className)) {
+    el.className += ` ${className}`;
+  }
 };
 
 export const toggleClass = (el: HTMLElement, className: string) => {

@@ -1,64 +1,111 @@
 :root {
   --font: Helvetica, Arial, Roboto, sans-serif;
   --font-size: 1rem;
-  --cl-fg: #323232;
-  --cl-action-bg: #43849f;
-  --cl-action-fg: #fff;
-  --cl-secondary-action-bg: #fff;
-  --cl-border: #c8c8c8;
-  --cl-focus: #43849f;
-  --cl-error: #9f4343;
-  --cl-highlight: #6b9f38;
-  --cl-track-bg: #efefef;
-  --spacing: 0.5rem;
-  --spacing-sm: 0.25rem;
-  --btn-spacing: 0.5rem 1rem;
-  --border-radius: 0.3rem;
+  --font-size-sm: 0.75rem;
+  --cl-gray1: #232323;
+  --cl-gray2: #343434;
+  --cl-gray3: #696969;
+  --cl-gray4: #8e8e8e;
+  --cl-gray5: #e2e2e2;
+  --cl-orange: #a46e30;
+  --cl-red: #a43430;
+  --cl-blue: #3070a4;
+  --cl-mint: #30a486;
+  --cl-green: #8fa430;
+
+  --cl-back: var(--cl-gray1);
+  --cl-fore: var(--cl-gray5);
+  --cl-block-bg: var(--cl-gray2);
+  --cl-action-bg: var(--cl-blue);
+  --cl-secondary-action-bg: var(--cl-gray1);
+  --cl-selected: var(--cl-blue);
+  --cl-solo: var(--cl-mint);
+  --cl-mute: var(--cl-red);
+  --cl-on: var(--cl-green);
+
   --boder-size: 1px;
+  --boder-focus-size: .3rem;
+  --border-radius: 0.2rem;
+  --border: var(--boder-size) solid var(--cl-gray1);
+  --border-focus: var(--boder-focus-size) solid var(--cl-gray1);
+
   --shadow-size: 5px;
-  --border: var(--boder-size) solid var(--cl-border);
+  --shadow: 0 0 var(--shadow-size) var(--cl-green);
+
+  --spacing: 0.5rem;
+  --spacing-sm: 0.2rem;
   --track-name-w: 5rem;
+  --header-height: 4rem;
 }
 
 html {
+  background: var(--cl-back);
   font-family: var(--font);
-  color: var(--cl-fg);
+  color: var(--cl-fore);
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  background: var(--cl-block-bg);
+  display: flex;
   padding: var(--spacing);
+  position: fixed;
+  width: 100%;
+}
+
+header h1 {
+  margin: 0;
+}
+
+main {
+  padding-top: var(--header-height);
 }
 
 button {
   cursor: pointer;
   border: none;
+  color: var(--cl-fg);
 }
 
 .action_btn {
   background: var(--cl-action-bg);
-  color: var(--cl-action-fg);
-  padding: var(--btn-spacing);
+  padding: var(--spacing);
+  text-transform: uppercase;
   border: none;
   border-radius: var(--border-radius);
   font-size: var(--font-size);
+  margin-left: var(--spacing);
 }
 
 #info {
-  margin-bottom: var(--spacing);
-}
-
-#tracks {
-  margin-top: var(--spacing);
+  padding: var(--spacing);
 }
 
 .track {
-  margin-bottom: var(--spacing);
-  border: var(--border);
-  padding: var(--spacing-sm);
-  background: var(--cl-track-bg);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing);
+  background: var(--cl-block-bg);
+  border-left: var(--border-focus);
+  margin-left: var(--spacing-sm);
+}
+
+.track-on {
+  border-left-color: var(--cl-on);
 }
 
 .track-info {
   line-height: 1;
   display: flex;
-  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing);
+  border-bottom: var(--border);
+  margin-bottom: var(--spacing);
 }
 
 .track-name {
@@ -67,29 +114,25 @@ button {
   padding: var(--spacing-sm);
   text-overflow: ellipsis;
   margin-right: var(--spacing-sm);
-  background: var(--cl-secondary-action-bg);
 }
 
 .range-info {
   padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: 2;
 }
 
 .track-status {
-  padding: var(--spacing-sm);
-  border: var(--border);
-  background: var(--cl-secondary-action-bg);
-}
-.track-on {
-  background: var(--cl-highlight);
-  color: var(--cl-action-fg);
+  padding: var(--spacing);
+  background-color: var(--cl-secondary-action-bg);
+  color: var(--cl-fore);
+  margin-right: var(--spacing-sm);
 }
 .track-off {
-  background: var(--cl-error);
-  color: var(--cl-action-fg);
+  background: var(--cl-mute);
 }
 .track-solo {
-  background: var(--cl-focus);
-  color: var(--cl-action-fg);
+  background: var(--cl-solo);
 }
 
 .step-on,
@@ -99,13 +142,12 @@ button {
   display: inline-block;
   padding: calc(var(--spacing) * 2) var(--spacing);
   margin-right: var(--spacing-sm);
-  border: var(--border);
 }
 
 .step-highlight {
-  box-shadow: 0 0 var(--shadow-size) var(--cl-highlight);
+  box-shadow: var(--shadow);
 }
 
 .step-on {
-  background: var(--cl-highlight);
+  background: var(--cl-selected);
 }

@@ -26,8 +26,6 @@ import {
 } from './helpers';
 import { createBtn, createRange } from './helpers/dom-helpers';
 
-import './test.css';
-
 const BPM_MINUTE = 60000 / 4;
 
 // Control variables
@@ -42,6 +40,7 @@ let output: GainNode;
 let delay: EchoNode;
 let lowPassFilter: BiquadFilterNode;
 let sequenceLength = 16;
+let hasSolo = 0;
 
 // DOM Elements
 const toggleBtnEl: HTMLElement = document.getElementById('toggle');
@@ -63,6 +62,21 @@ const togglePlay = () => {
 const setPosition = (newPosition: number) => {
   playPosition = newPosition;
   highlightPosition(playPosition);
+};
+
+const calculateSolo = () => {
+  return demoRhythm.reduce((acc, track) => acc + (track[TRACK_STATE] === TRACK_STATE_SOLO ? 1 : 0), 0);
+};
+
+const markActiveTracks = () => {
+  hasSolo = calculateSolo();
+  demoRhythm.forEach((track, index) => {
+    if ((hasSolo && track[TRACK_STATE] === TRACK_STATE_SOLO) || (!hasSolo && track[TRACK_STATE] === TRACK_STATE_ON)) {
+      addClass(tracksEl.childNodes[index] as HTMLDivElement, 'track-on');
+    } else {
+      removeClass(tracksEl.childNodes[index] as HTMLDivElement, 'track-on');
+    }
+  });
 };
 
 const init = async () => {
@@ -88,6 +102,7 @@ const init = async () => {
     }, Promise.resolve([]));
   renderInfo();
   renderTracks();
+  markActiveTracks();
 };
 
 const renderTracks = () => {
@@ -109,6 +124,7 @@ const renderTracks = () => {
           track[TRACK_STATE] = TRACK_STATE_OFF;
           muteEl.setAttribute('class', 'track-status track-off');
           soloEl.setAttribute('class', 'track-status');
+          markActiveTracks();
         }
       }
     );
@@ -126,6 +142,7 @@ const renderTracks = () => {
           muteEl.setAttribute('class', 'track-status');
           soloEl.setAttribute('class', 'track-status track-solo');
         }
+        markActiveTracks();
       }
     );
     trackInfoEl.appendChild(soloEl);
@@ -135,7 +152,7 @@ const renderTracks = () => {
     });
     volumeEl.value = track[TRACK_VOLUME].toString();
     const volumeVal = createEl('span', 'range-info', track[TRACK_VOLUME] * 100 + '%');
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'Volume: '));
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'volume: '));
     trackInfoEl.appendChild(volumeEl);
     trackInfoEl.appendChild(volumeVal);
     const panEl = createRange(
@@ -149,7 +166,7 @@ const renderTracks = () => {
     );
     panEl.value = track[TRACK_PAN].toString();
     const panVal = createEl('span', 'range-info', track[TRACK_PAN] * 100 + '%');
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'Pan: '));
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'pan: '));
     trackInfoEl.appendChild(panEl);
     trackInfoEl.appendChild(panVal);
     const pitchEl = createRange(
@@ -163,7 +180,7 @@ const renderTracks = () => {
     );
     pitchEl.value = track[TRACK_PAN].toString();
     const pitchVal = createEl('span', 'range-info', track[TRACK_PAN].toString());
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'Pitch: '));
+    trackInfoEl.appendChild(createEl('span', 'range-info', 'pitch: '));
     trackInfoEl.appendChild(pitchEl);
     trackInfoEl.appendChild(pitchVal);
 
@@ -193,24 +210,24 @@ const highlightPosition = (position: number) => {
 const renderInfo = () => {
   const volumeEl = createRange(value => (output.gain.value = value));
   volumeEl.value = output.gain.value.toString();
-  const volumeWrapper = createEl('div', '', 'Volume: ');
+  const volumeWrapper = createEl('div', '', 'volume: ');
   volumeWrapper.appendChild(volumeEl);
 
   const lowPassEl = createRange(value => (lowPassFilter.frequency.value = value), audioContext.sampleRate / 2, 0, 1);
   lowPassEl.value = lowPassFilter.frequency.value.toString();
-  const lowPassWrapper = createEl('div', '', 'LowPass freq: ');
+  const lowPassWrapper = createEl('div', '', 'low pass freq: ');
   lowPassWrapper.appendChild(lowPassEl);
 
   const delayTimeEl = createRange(value => (delay.time.value = value), 0.5);
   delayTimeEl.value = delay.time.value.toString();
   const delayVolEl = createRange(value => (delay.volume.value = value));
   delayVolEl.value = delay.volume.value.toString();
-  const delayWrapper = createEl('div', '', 'Delay time: ');
+  const delayWrapper = createEl('div', '', 'delay time: ');
   delayWrapper.appendChild(delayTimeEl);
   delayWrapper.appendChild(createEl('span', '', 'volume:'));
   delayWrapper.appendChild(delayVolEl);
 
-  infoEl.innerHTML = `<div>BPM: <b>${bpm}</b></div>`;
+  infoEl.innerHTML = `<div>bpm: <b>${bpm}</b></div>`;
   infoEl.appendChild(volumeWrapper);
   infoEl.appendChild(lowPassWrapper);
   infoEl.appendChild(delayWrapper);
@@ -218,7 +235,6 @@ const renderInfo = () => {
 
 const startPlaying = (tracks: Tracks) => {
   return setInterval(() => {
-    const soloOnly = tracks.some(t => t[TRACK_STATE] === TRACK_STATE_SOLO);
     if (audioContext && buffers) {
       setPosition((playPosition + 1) % sequenceLength);
 
@@ -226,7 +242,7 @@ const startPlaying = (tracks: Tracks) => {
         if (track[TRACK_STATE] === TRACK_STATE_OFF) {
           return;
         }
-        if (soloOnly && track[TRACK_STATE] !== TRACK_STATE_SOLO) {
+        if (hasSolo && track[TRACK_STATE] !== TRACK_STATE_SOLO) {
           return;
         }
         if (track[TRACK_SEQ][playPosition]) {
