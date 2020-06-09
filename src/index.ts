@@ -112,23 +112,6 @@ const renderTracks = () => {
     const trackInfoEl = createEl('div', 'track-info');
     const nickEl = createEl('span', 'track-name', track[TRACK_NICK]);
     trackInfoEl.appendChild(nickEl);
-    const muteEl = createBtn(
-      'Mute',
-      'M',
-      `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`,
-      () => {
-        if (track[TRACK_STATE] === TRACK_STATE_OFF) {
-          track[TRACK_STATE] = TRACK_STATE_ON;
-          muteEl.setAttribute('class', 'track-status');
-        } else {
-          track[TRACK_STATE] = TRACK_STATE_OFF;
-          muteEl.setAttribute('class', 'track-status track-off');
-          soloEl.setAttribute('class', 'track-status');
-          markActiveTracks();
-        }
-      }
-    );
-    trackInfoEl.appendChild(muteEl);
     const soloEl = createBtn(
       'Solo',
       'S',
@@ -146,6 +129,23 @@ const renderTracks = () => {
       }
     );
     trackInfoEl.appendChild(soloEl);
+    const muteEl = createBtn(
+      'Mute',
+      'M',
+      `track-status${track[TRACK_STATE] === TRACK_STATE_OFF ? ' track-off' : ''}`,
+      () => {
+        if (track[TRACK_STATE] === TRACK_STATE_OFF) {
+          track[TRACK_STATE] = TRACK_STATE_ON;
+          muteEl.setAttribute('class', 'track-status');
+        } else {
+          track[TRACK_STATE] = TRACK_STATE_OFF;
+          muteEl.setAttribute('class', 'track-status track-off');
+          soloEl.setAttribute('class', 'track-status');
+          markActiveTracks();
+        }
+      }
+    );
+    trackInfoEl.appendChild(muteEl);
     const volumeEl = createRange(value => {
       track[TRACK_VOLUME] = value;
       volumeVal.innerText = value * 100 + '%';
