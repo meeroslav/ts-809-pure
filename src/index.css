@@ -1,6 +1,7 @@
 :root {
   --font: Helvetica, Arial, Roboto, sans-serif;
   --font-size: 1rem;
+  --font-size-md: 0.85rem;
   --font-size-sm: 0.75rem;
   --cl-gray1: #232323;
   --cl-gray2: #343434;
@@ -18,24 +19,37 @@
   --cl-block-bg: var(--cl-gray2);
   --cl-action-bg: var(--cl-blue);
   --cl-secondary-action-bg: var(--cl-gray1);
-  --cl-selected: var(--cl-blue);
-  --cl-solo: var(--cl-mint);
+  --cl-selected: var(--cl-green);
+  --cl-solo: var(--cl-green);
   --cl-mute: var(--cl-red);
   --cl-on: var(--cl-green);
 
-  --boder-size: 1px;
-  --boder-focus-size: .3rem;
-  --border-radius: 0.2rem;
+  --size-lg: .75rem;
+  --size: .5rem;
+  --size-md: .3rem;
+  --size-sm: .2rem;
+  --size-hairline: .1rem;
+
+  --spacing-lg: var(--size-lg);
+  --spacing: var(--size);
+  --spacing-sm: var(--size-sm);
+  --spacing-xs: var(--size-hairline);
+
+  --boder-size: var(--size-hairline);
+  --boder-focus-size: var(--size-md);
+  --border-radius: var(--size-sm);
   --border: var(--boder-size) solid var(--cl-gray1);
   --border-focus: var(--boder-focus-size) solid var(--cl-gray1);
 
-  --shadow-size: 5px;
-  --shadow: 0 0 var(--shadow-size) var(--cl-green);
+  --shadow-blur: var(--size-hairline);
+  --shadow-spread: var(--size-hairline);
+  --shadow: 0 0 var(--shadow-blur) var(--shadow-spread) var(--cl-green);
 
-  --spacing: 0.5rem;
-  --spacing-sm: 0.2rem;
   --track-name-w: 5rem;
   --header-height: 4rem;
+
+  --action-btn-w: 2rem;
+  --action-btn-h: 2rem;
 }
 
 html {
@@ -76,7 +90,10 @@ button {
 
 .action_btn {
   background: var(--cl-action-bg);
-  padding: var(--spacing);
+  height: var(--action-btn-h);
+  min-width: var(--action-btn-w);
+  text-align: center;
+  line-height: 2;
   text-transform: uppercase;
   border: none;
   border-radius: var(--border-radius);
@@ -86,6 +103,12 @@ button {
 
 #info {
   padding: var(--spacing);
+}
+
+.info-line {
+  display: flex;
+  line-height: 1;
+  margin-bottom: var(--spacing-sm);
 }
 
 .track {
@@ -105,12 +128,13 @@ button {
   display: flex;
   padding-bottom: var(--spacing);
   border-bottom: var(--border);
-  margin-bottom: var(--spacing);
+  margin-bottom: var(--spacing-lg);
 }
 
 .track-name {
   width: var(--track-name-w);
   overflow: hidden;
+  line-height: 1.5;
   padding: var(--spacing-sm);
   text-overflow: ellipsis;
   margin-right: var(--spacing-sm);
@@ -123,16 +147,18 @@ button {
 }
 
 .track-status {
+  border-radius: var(--border-radius);
+  margin-right: var(--spacing-xs);
   padding: var(--spacing);
   background-color: var(--cl-secondary-action-bg);
   color: var(--cl-fore);
-  margin-right: var(--spacing-sm);
 }
 .track-off {
   background: var(--cl-mute);
 }
 .track-solo {
   background: var(--cl-solo);
+  color: var(--cl-back);
 }
 
 .step-on,
@@ -140,12 +166,25 @@ button {
   border-radius: var(--border-radius);
   background: var(--cl-secondary-action-bg);
   display: inline-block;
-  padding: calc(var(--spacing) * 2) var(--spacing);
-  margin-right: var(--spacing-sm);
+  padding: var(--spacing);
+  height: var(--spacing);
+  width: var(--size-md);
+  box-sizing: content-box;
+  margin-right: var(--spacing-xs);
 }
 
 .step-highlight {
+  position: relative;
+}
+
+.step-highlight::before {
+  content: '●';
+  font-size: 0;
+  position: absolute;
+  top: calc(var(--spacing) * -1);
+  left: 50%;
   box-shadow: var(--shadow);
+  border-radius: 50%;
 }
 
 .step-on {

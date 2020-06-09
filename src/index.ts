@@ -50,10 +50,10 @@ const tracksEl: HTMLElement = document.getElementById('tracks');
 const togglePlay = () => {
   playState = !playState;
   if (playState) {
-    toggleBtnEl.innerHTML = 'Stop';
+    toggleBtnEl.innerHTML = '&#9632;';
     playingInterval = startPlaying(demoRhythm);
   } else {
-    toggleBtnEl.innerHTML = 'Play';
+    toggleBtnEl.innerHTML = '&#9654;';
     clearInterval(playingInterval);
     setPosition(-1);
   }
@@ -210,24 +210,27 @@ const highlightPosition = (position: number) => {
 const renderInfo = () => {
   const volumeEl = createRange(value => (output.gain.value = value));
   volumeEl.value = output.gain.value.toString();
-  const volumeWrapper = createEl('div', '', 'volume: ');
+  const volumeWrapper = createEl('div', 'info-line');
+  volumeWrapper.appendChild(createEl('span', 'range-info', 'volume: '));
   volumeWrapper.appendChild(volumeEl);
 
   const lowPassEl = createRange(value => (lowPassFilter.frequency.value = value), audioContext.sampleRate / 2, 0, 1);
   lowPassEl.value = lowPassFilter.frequency.value.toString();
-  const lowPassWrapper = createEl('div', '', 'low pass freq: ');
+  const lowPassWrapper = createEl('div', 'info-line');
+  lowPassWrapper.appendChild(createEl('span', 'range-info', 'low pass freq: '));
   lowPassWrapper.appendChild(lowPassEl);
 
   const delayTimeEl = createRange(value => (delay.time.value = value), 0.5);
   delayTimeEl.value = delay.time.value.toString();
   const delayVolEl = createRange(value => (delay.volume.value = value));
   delayVolEl.value = delay.volume.value.toString();
-  const delayWrapper = createEl('div', '', 'delay time: ');
+  const delayWrapper = createEl('div', 'info-line');
+  delayWrapper.appendChild(createEl('span', 'range-info', 'delay time: '));
   delayWrapper.appendChild(delayTimeEl);
-  delayWrapper.appendChild(createEl('span', '', 'volume:'));
+  delayWrapper.appendChild(createEl('span', 'range-info', 'volume:'));
   delayWrapper.appendChild(delayVolEl);
 
-  infoEl.innerHTML = `<div>bpm: <b>${bpm}</b></div>`;
+  infoEl.innerHTML = `<div class='info-line'><span class='range-info'>bpm: </span><b>${bpm}</b></div>`;
   infoEl.appendChild(volumeWrapper);
   infoEl.appendChild(lowPassWrapper);
   infoEl.appendChild(delayWrapper);
