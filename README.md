@@ -9,7 +9,7 @@ Testing playground for TS drum machine
 - [X] Add custom audio filters
 - [X] Make sequence controllable
 - [X] Add volume and filter controls
-- [ ] Add BPM control
+- [X] Add BPM control
 - [ ] Add volume visualizer
 - [ ] Repace range inputs with knobs
 - [X] Add styles to drum machine

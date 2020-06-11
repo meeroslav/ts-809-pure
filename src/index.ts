@@ -24,7 +24,7 @@ import {
   EchoNode,
   createPanner,
 } from './helpers';
-import { createBtn, createRange } from './helpers/dom-helpers';
+import { createBtn, createRange, createKnob, createFader } from './helpers/dom-helpers';
 
 const BPM_MINUTE = 60000 / 4;
 
@@ -57,6 +57,12 @@ const togglePlay = () => {
     clearInterval(playingInterval);
     setPosition(-1);
   }
+};
+
+const setBpm = (value: number) => {
+  clearInterval(playingInterval);
+  bpm = value;
+  playingInterval = startPlaying(demoRhythm);
 };
 
 const setPosition = (newPosition: number) => {
@@ -208,32 +214,28 @@ const highlightPosition = (position: number) => {
 };
 
 const renderInfo = () => {
-  const volumeEl = createRange(value => (output.gain.value = value));
-  volumeEl.value = output.gain.value.toString();
-  const volumeWrapper = createEl('div', 'info-line');
-  volumeWrapper.appendChild(createEl('span', 'range-info', 'volume: '));
-  volumeWrapper.appendChild(volumeEl);
+  const bpmEl = createFader('bpm', bpm, value => setBpm(value), 300, 40, 1);
+  const volumeEl = createFader('volume', output.gain.value, value => (output.gain.value = value));
+  const lowPassEl = createFader(
+    'low pass freq',
+    lowPassFilter.frequency.value,
+    value => (lowPassFilter.frequency.value = value),
+    audioContext.sampleRate / 2,
+    0,
+    1
+  );
 
-  const lowPassEl = createRange(value => (lowPassFilter.frequency.value = value), audioContext.sampleRate / 2, 0, 1);
-  lowPassEl.value = lowPassFilter.frequency.value.toString();
-  const lowPassWrapper = createEl('div', 'info-line');
-  lowPassWrapper.appendChild(createEl('span', 'range-info', 'low pass freq: '));
-  lowPassWrapper.appendChild(lowPassEl);
+  const delayTimeEl = createFader('delay time', delay.time.value, value => (delay.time.value = value), 0.5);
+  const delayVolEl = createFader('delay volume', delay.volume.value, value => (delay.volume.value = value));
 
-  const delayTimeEl = createRange(value => (delay.time.value = value), 0.5);
-  delayTimeEl.value = delay.time.value.toString();
-  const delayVolEl = createRange(value => (delay.volume.value = value));
-  delayVolEl.value = delay.volume.value.toString();
-  const delayWrapper = createEl('div', 'info-line');
-  delayWrapper.appendChild(createEl('span', 'range-info', 'delay time: '));
-  delayWrapper.appendChild(delayTimeEl);
-  delayWrapper.appendChild(createEl('span', 'range-info', 'volume:'));
-  delayWrapper.appendChild(delayVolEl);
+  infoEl.appendChild(bpmEl);
+  infoEl.appendChild(volumeEl);
+  infoEl.appendChild(lowPassEl);
+  infoEl.appendChild(delayTimeEl);
+  infoEl.appendChild(delayVolEl);
 
-  infoEl.innerHTML = `<div class='info-line'><span class='range-info'>bpm: </span><b>${bpm}</b></div>`;
-  infoEl.appendChild(volumeWrapper);
-  infoEl.appendChild(lowPassWrapper);
-  infoEl.appendChild(delayWrapper);
+  // const testEl = createKnob('volume', output.gain.value, value => (output.gain.value = value));
+  // infoEl.appendChild(testEl);
 };
 
 const startPlaying = (tracks: Tracks) => {

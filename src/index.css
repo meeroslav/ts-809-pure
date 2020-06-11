@@ -2,7 +2,7 @@
   --font: Helvetica, Arial, Roboto, sans-serif;
   --font-size: 1rem;
   --font-size-md: 0.85rem;
-  --font-size-sm: 0.75rem;
+  --font-size-sm: 0.6rem;
   --cl-gray1: #232323;
   --cl-gray2: #343434;
   --cl-gray3: #696969;
@@ -192,4 +192,47 @@ button {
 
 .step-on {
   background: var(--cl-selected);
+}
+
+.knob, .fader {
+  display: flex;
+  flex-direction: column;
+}
+
+.knob-range-wrapper, .fader-range-wrapper {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.knob { width: 4rem; }
+.fader { width: 8rem; }
+
+.knob-range-wrapper {
+  height: 80px;
+}
+.fader-range-wrapper {
+  height: 30px;
+}
+
+.knob-range, .fader-range {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: grab;
+}
+
+.knob-range {
+  transform: rotate(-90deg);
+}
+
+.knob-label, .fader-label {
+  flex: 0 0 auto;
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
 }

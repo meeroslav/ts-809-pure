@@ -42,3 +42,47 @@ export const createRange = (callback: (value: number) => void, max = 1, min = 0,
   el.oninput = (e: Event) => callback((e.target as HTMLInputElement).valueAsNumber);
   return el;
 };
+
+export const createFader = (
+  label: string,
+  value: number,
+  callback: (value: number) => void,
+  max = 1,
+  min = 0,
+  step = 0.01
+): HTMLElement => {
+  const el: HTMLElement = createEl('div', 'fader');
+  // create range
+  const wrapperEl: HTMLElement = createEl('div', 'fader-range-wrapper');
+  const rangeEl = createRange(callback, max, min, step);
+  rangeEl.setAttribute('class', 'fader-range');
+  rangeEl.value = value.toString();
+  wrapperEl.appendChild(rangeEl);
+  // append elements to root
+  el.appendChild(wrapperEl);
+  const labelEl = createEl('div', 'fader-label', label);
+  el.appendChild(labelEl);
+  return el;
+};
+
+export const createKnob = (
+  label: string,
+  value: number,
+  callback: (value: number) => void,
+  max = 1,
+  min = 0,
+  step = 0.01
+) => {
+  const el: HTMLElement = createEl('div', 'knob');
+  // create range
+  const wrapperEl: HTMLElement = createEl('div', 'knob-range-wrapper');
+  const rangeEl = createRange(callback, max, min, step);
+  rangeEl.setAttribute('class', 'knob-range');
+  rangeEl.value = value.toString();
+  wrapperEl.appendChild(rangeEl);
+  // append elements to root
+  el.appendChild(wrapperEl);
+  const labelEl = createEl('div', 'knob-label', label);
+  el.appendChild(labelEl);
+  return el;
+};
