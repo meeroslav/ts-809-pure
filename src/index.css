@@ -7,7 +7,7 @@
   --cl-gray2: #343434;
   --cl-gray3: #696969;
   --cl-gray4: #8e8e8e;
-  --cl-gray5: #e2e2e2;
+  --cl-gray5: #e1e1e1;
   --cl-orange: #a46e30;
   --cl-red: #a43430;
   --cl-blue: #3070a4;
@@ -32,18 +32,17 @@
 
   --spacing-lg: var(--size-lg);
   --spacing: var(--size);
+  --spacing-md: var(--size-md);
   --spacing-sm: var(--size-sm);
   --spacing-xs: var(--size-hairline);
 
   --boder-size: var(--size-hairline);
+  --boder-highlight-size: var(--size-sm);
   --boder-focus-size: var(--size-md);
   --border-radius: var(--size-sm);
   --border: var(--boder-size) solid var(--cl-gray1);
+  --border-highlight: var(--boder-highlight-size) solid var(--cl-gray1);
   --border-focus: var(--boder-focus-size) solid var(--cl-gray1);
-
-  --shadow-blur: var(--size-hairline);
-  --shadow-spread: var(--size-hairline);
-  --shadow: 0 0 var(--shadow-blur) var(--shadow-spread) var(--cl-green);
 
   --track-name-w: 5rem;
   --header-height: 4rem;
@@ -128,11 +127,12 @@ button {
   display: flex;
   padding-bottom: var(--spacing);
   border-bottom: var(--border);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing);
 }
 
 .track-name {
   width: var(--track-name-w);
+  background-color: var(--cl-back);
   overflow: hidden;
   line-height: 1.5;
   padding: var(--spacing-sm);
@@ -171,20 +171,23 @@ button {
   width: var(--size-md);
   box-sizing: content-box;
   margin-right: var(--spacing-xs);
-}
-
-.step-highlight {
+  margin-bottom: var(--spacing-xs);
   position: relative;
 }
 
-.step-highlight::before {
+.step-on::after, .step-off::after {
+  border-top: var(--border-highlight);
+  border-radius: var(--border-radius);
+  position: absolute;
+  bottom: calc(var(--spacing-md) * -1);
+  left: 0;
+  width: 100%;
   content: '●';
   font-size: 0;
-  position: absolute;
-  top: calc(var(--spacing) * -1);
-  left: 50%;
-  box-shadow: var(--shadow);
-  border-radius: 50%;
+}
+
+.step-highlight::after {
+  border-color: var(--cl-selected);
 }
 
 .step-on {
