@@ -60,9 +60,10 @@ const togglePlay = () => {
 };
 
 const setBpm = (value: number) => {
-  clearInterval(playingInterval);
   bpm = value;
-  playingInterval = startPlaying(demoRhythm);
+  if (playState) {
+    playingInterval = startPlaying(demoRhythm);
+  }
 };
 
 const setPosition = (newPosition: number) => {
@@ -152,16 +153,13 @@ const renderTracks = () => {
       }
     );
     trackInfoEl.appendChild(muteEl);
-    const volumeEl = createRange(value => {
+    const volumeEl = createFader('volume', track[TRACK_VOLUME], value => {
       track[TRACK_VOLUME] = value;
-      volumeVal.innerText = value * 100 + '%';
     });
-    volumeEl.value = track[TRACK_VOLUME].toString();
-    const volumeVal = createEl('span', 'range-info', track[TRACK_VOLUME] * 100 + '%');
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'volume: '));
     trackInfoEl.appendChild(volumeEl);
-    trackInfoEl.appendChild(volumeVal);
-    const panEl = createRange(
+    const panEl = createFader(
+      'pan',
+      track[TRACK_PAN],
       value => {
         track[TRACK_PAN] = value;
         panVal.innerText = value * 100 + '%';
@@ -170,12 +168,12 @@ const renderTracks = () => {
       -1,
       0.01
     );
-    panEl.value = track[TRACK_PAN].toString();
     const panVal = createEl('span', 'range-info', track[TRACK_PAN] * 100 + '%');
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'pan: '));
     trackInfoEl.appendChild(panEl);
     trackInfoEl.appendChild(panVal);
-    const pitchEl = createRange(
+    const pitchEl = createFader(
+      'pitch',
+      track[TRACK_PITCH],
       value => {
         track[TRACK_PITCH] = value;
         pitchVal.innerText = value.toString();
@@ -184,9 +182,7 @@ const renderTracks = () => {
       -12,
       1
     );
-    pitchEl.value = track[TRACK_PAN].toString();
     const pitchVal = createEl('span', 'range-info', track[TRACK_PAN].toString());
-    trackInfoEl.appendChild(createEl('span', 'range-info', 'pitch: '));
     trackInfoEl.appendChild(pitchEl);
     trackInfoEl.appendChild(pitchVal);
 
@@ -214,28 +210,34 @@ const highlightPosition = (position: number) => {
 };
 
 const renderInfo = () => {
-  const bpmEl = createFader('bpm', bpm, value => setBpm(value), 300, 40, 1);
-  const volumeEl = createFader('volume', output.gain.value, value => (output.gain.value = value));
-  const lowPassEl = createFader(
-    'low pass freq',
+  const masterSection = createEl('div', 'info-block');
+  const bpmEl = createKnob('bpm', bpm, value => setBpm(value), 300, 40, 1);
+  const volumeEl = createKnob('volume', output.gain.value, value => (output.gain.value = value));
+  masterSection.appendChild(bpmEl);
+  masterSection.appendChild(volumeEl);
+
+  const lowpassSection = createEl('div', 'info-block');
+  lowpassSection.appendChild(createEl('label', 'info-block-label', 'low pass'));
+  const lowPassEl = createKnob(
+    'frequency',
     lowPassFilter.frequency.value,
     value => (lowPassFilter.frequency.value = value),
     audioContext.sampleRate / 2,
     0,
     1
   );
+  lowpassSection.appendChild(lowPassEl);
 
-  const delayTimeEl = createFader('delay time', delay.time.value, value => (delay.time.value = value), 0.5);
-  const delayVolEl = createFader('delay volume', delay.volume.value, value => (delay.volume.value = value));
+  const delaySection = createEl('div', 'info-block');
+  delaySection.appendChild(createEl('label', 'info-block-label', 'delay'));
+  const delayTimeEl = createKnob('time', delay.time.value, value => (delay.time.value = value), 0.5);
+  const delayVolEl = createKnob('volume', delay.volume.value, value => (delay.volume.value = value));
+  delaySection.appendChild(delayTimeEl);
+  delaySection.appendChild(delayVolEl);
 
-  infoEl.appendChild(bpmEl);
-  infoEl.appendChild(volumeEl);
-  infoEl.appendChild(lowPassEl);
-  infoEl.appendChild(delayTimeEl);
-  infoEl.appendChild(delayVolEl);
-
-  // const testEl = createKnob('volume', output.gain.value, value => (output.gain.value = value));
-  // infoEl.appendChild(testEl);
+  infoEl.appendChild(masterSection);
+  infoEl.appendChild(lowpassSection);
+  infoEl.appendChild(delaySection);
 };
 
 const startPlaying = (tracks: Tracks) => {

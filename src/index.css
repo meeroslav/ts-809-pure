@@ -17,12 +17,13 @@
   --cl-back: var(--cl-gray1);
   --cl-fore: var(--cl-gray5);
   --cl-block-bg: var(--cl-gray2);
-  --cl-action-bg: var(--cl-blue);
+  --cl-action-bg: var(--cl-mint);
   --cl-secondary-action-bg: var(--cl-gray1);
   --cl-selected: var(--cl-green);
-  --cl-solo: var(--cl-green);
+  --cl-solo: var(--cl-blue);
   --cl-mute: var(--cl-red);
   --cl-on: var(--cl-green);
+  --cl-fill: var(--cl-mint);
 
   --size-lg: .75rem;
   --size: .5rem;
@@ -49,6 +50,10 @@
 
   --action-btn-w: 2rem;
   --action-btn-h: 2rem;
+
+  --knob-size: 4em;
+  --fader-width: 8rem;
+  --fade-height: 1.4rem;
 }
 
 html {
@@ -63,6 +68,10 @@ body {
   font-family: var(--font);
   padding: 0;
   margin: 0;
+}
+
+body * {
+  box-sizing: border-box;
 }
 
 header {
@@ -103,12 +112,22 @@ button {
 
 #info {
   padding: var(--spacing);
+  display: flex;
 }
 
-.info-line {
+.info-block {
+  background-color: var(--cl-gray2);
   display: flex;
-  line-height: 1;
-  margin-bottom: var(--spacing-sm);
+  margin-right: var(--spacing);
+  align-items: center;
+}
+
+.info-block-label {
+  flex: 0 0 auto;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing);
 }
 
 .track {
@@ -198,6 +217,8 @@ button {
 .knob, .fader {
   display: flex;
   flex-direction: column;
+  margin-bottom: var(--spacing-sm);
+  margin-right: var(--spacing-sm);
 }
 
 .knob-range-wrapper, .fader-range-wrapper {
@@ -206,14 +227,14 @@ button {
   width: 100%;
 }
 
-.knob { width: 4rem; }
-.fader { width: 8rem; }
+.knob { width: var(--knob-size); }
+.fader { width: var(--fader-width); }
 
 .knob-range-wrapper {
-  height: 80px;
+  height: var(--knob-size);
 }
 .fader-range-wrapper {
-  height: 30px;
+  height: var(--fade-height);
 }
 
 .knob-range, .fader-range {
@@ -223,10 +244,40 @@ button {
   top: 0;
   left: 0;
   cursor: grab;
+  opacity: 0;
 }
 
 .knob-range {
   transform: rotate(-90deg);
+}
+
+.knob-visual, .fader-visual {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.knob-ring-bg, .fader-bg {
+  fill: var(--cl-gray1);
+  stroke: var(--cl-gray1);
+  stroke-width: 1;
+}
+.knob-ring, .fader-indicator {
+  fill: var(--cl-fill);
+}
+.knob-top {
+  fill: var(--cl-gray2);
+  stroke: var(--cl-gray1);
+  stroke-width: 1;
+}
+.fader-handle {
+  fill: var(--cl-gray2);
+  stroke: var(--cl-gray1);
+  stroke-width: 1;
+}
+.knob-indictator-dot {
+  transform-origin: center;
+  fill: var(--cl-fill);
 }
 
 .knob-label, .fader-label {

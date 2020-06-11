@@ -11,7 +11,7 @@ Testing playground for TS drum machine
 - [X] Add volume and filter controls
 - [X] Add BPM control
 - [ ] Add volume visualizer
-- [ ] Repace range inputs with knobs
+- [X] Repace range inputs with knobs
 - [X] Add styles to drum machine
 - [ ] Add/remove drum track
 - [ ] Make drum track sequence length changeable (2/4/8/16/32)
