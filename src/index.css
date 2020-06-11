@@ -10,9 +10,9 @@
   --cl-gray5: #e1e1e1;
   --cl-orange: #a46e30;
   --cl-red: #a43430;
-  --cl-blue: #3070a4;
+  --cl-blue: #3076a4;
   --cl-mint: #30a486;
-  --cl-green: #8fa430;
+  --cl-green: #30a449;
 
   --cl-back: var(--cl-gray1);
   --cl-fore: var(--cl-gray5);
@@ -271,7 +271,7 @@ button {
   stroke-width: 1;
 }
 .fader-handle {
-  fill: var(--cl-gray2);
+  fill: var(--cl-gray4);
   stroke: var(--cl-gray1);
   stroke-width: 1;
 }

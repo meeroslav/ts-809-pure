@@ -22,7 +22,7 @@ export interface EchoNode extends AudioNode {
   volume: AudioParam;
 }
 
-export const createEcho = (context: AudioContext, time = 0, volume = 0.15): EchoNode => {
+export const createEcho = (context: AudioContext, time = 0, volume = 0): EchoNode => {
   const input = context.createGain();
   const output = context.createGain();
   const delay = context.createDelay();
