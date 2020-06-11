@@ -33,7 +33,7 @@ export const createBtn = (title: string, text: string, className: string, callba
   return el;
 };
 
-export const createRange = (callback: (value: number) => void, max = 1, min = 0, step = 0.01): HTMLInputElement => {
+const createRange = (callback: (value: number) => void, max = 1, min = 0, step = 0.01): HTMLInputElement => {
   const el: HTMLInputElement = document.createElement('input');
   el.setAttribute('type', 'range');
   el.setAttribute('min', min.toString());
@@ -57,19 +57,21 @@ export const createFader = (
   callback: (value: number) => void,
   max = 1,
   min = 0,
-  step = 0.01
+  step = 0.01,
+  centralized = false
 ): HTMLElement => {
   const el: HTMLElement = createEl('div', 'fader');
 
   // create svg
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   const wrapperEl: HTMLElement = createEl('div', 'fader-range-wrapper');
-  const normalizedValue = ((value - min) * FADER_W) / (max - min);
+  const normalizedValue = centralized ? (value * FADER_W) / 2 / max : ((value - min) * FADER_W) / (max - min);
+  const normalizedX = centralized ? FADER_X + FADER_W / 2 : FADER_X;
   svgEl.setAttribute('class', 'fader-visual');
   svgEl.innerHTML = `
     <rect class="fader-bg" x="${FADER_X}" y="${FADER_Y}" width="${FADER_W}" height="${FADER_H}" ></rect>
-    <rect class="fader-indicator" x="${FADER_X}" y="${FADER_Y}" width="${normalizedValue}" height="${FADER_H}" ></rect>
-    <rect class="fader-handle" x="${FADER_X + normalizedValue - HANDLE_W / 2}" y="${
+    <rect class="fader-indicator" x="${normalizedX}" y="${FADER_Y}" width="${normalizedValue}" height="${FADER_H}" ></rect>
+    <rect class="fader-handle" x="${normalizedX + normalizedValue - HANDLE_W / 2}" y="${
     FADER_Y - HANDLE_OFFSET_H
   }" width="${HANDLE_W}" height="${HANDLE_H}" ></rect>
   `;
@@ -77,6 +79,11 @@ export const createFader = (
   wrapperEl.appendChild(svgEl);
   const internalCallback = (val: number) => {
     callback(val);
+    const norm = centralized ? (val * FADER_W) / 2 / max : ((val - min) * FADER_W) / (max - min);
+    const indicator: SVGRectElement = svgEl.getElementsByClassName('fader-indicator')[0] as SVGRectElement;
+    indicator.setAttribute('width', norm.toString());
+    const handle: SVGRectElement = svgEl.getElementsByClassName('fader-handle')[0] as SVGRectElement;
+    handle.setAttribute('x', (normalizedX + norm - HANDLE_W / 2).toString());
   };
   // create range
   const rangeEl = createRange(internalCallback, max, min, step);

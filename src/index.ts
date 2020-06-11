@@ -24,7 +24,7 @@ import {
   EchoNode,
   createPanner,
 } from './helpers';
-import { createBtn, createRange, createKnob, createFader } from './helpers/dom-helpers';
+import { createBtn, createKnob, createFader } from './helpers/dom-helpers';
 
 const BPM_MINUTE = 60000 / 4;
 
@@ -162,29 +162,25 @@ const renderTracks = () => {
       track[TRACK_PAN],
       value => {
         track[TRACK_PAN] = value;
-        panVal.innerText = value * 100 + '%';
       },
       1,
       -1,
-      0.01
+      0.01,
+      true
     );
-    const panVal = createEl('span', 'range-info', track[TRACK_PAN] * 100 + '%');
     trackInfoEl.appendChild(panEl);
-    trackInfoEl.appendChild(panVal);
     const pitchEl = createFader(
       'pitch',
       track[TRACK_PITCH],
       value => {
         track[TRACK_PITCH] = value;
-        pitchVal.innerText = value.toString();
       },
       12,
       -12,
-      1
+      1,
+      true
     );
-    const pitchVal = createEl('span', 'range-info', track[TRACK_PAN].toString());
     trackInfoEl.appendChild(pitchEl);
-    trackInfoEl.appendChild(pitchVal);
 
     trackEl.appendChild(trackInfoEl);
 
