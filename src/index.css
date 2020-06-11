@@ -71,6 +71,7 @@ header {
   padding: var(--spacing);
   position: fixed;
   width: 100%;
+  z-index: 10;
 }
 
 header h1 {
