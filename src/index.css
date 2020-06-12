@@ -151,10 +151,12 @@ button {
 }
 
 .track-name {
+  display: flex;
+  align-items: center;
   width: var(--track-name-w);
   background-color: var(--cl-back);
   overflow: hidden;
-  line-height: 1.5;
+  line-height: 1;
   padding: var(--spacing-sm);
   text-overflow: ellipsis;
   margin-right: var(--spacing-sm);
