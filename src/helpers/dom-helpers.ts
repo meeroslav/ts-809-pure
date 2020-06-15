@@ -138,29 +138,10 @@ export const createKnob = (
   min = 0,
   step = 0.01
 ) => {
-  const el: HTMLElement = createEl('div', 'knob');
-  const wrapperEl: HTMLElement = createEl('div', 'knob-range-wrapper');
-  // create svg
-  const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svgEl.setAttribute('class', 'knob-visual');
-  const normalizedValue = ((value - min) * 100) / (max - min);
-  svgEl.innerHTML = `
-    <path class="knob-ring-bg" d="${PATH_PREFIX},1,1,${circlePosX(100)},${circlePosY(100)}${PATH_SUFIX}"></path>
-    <path class="knob-ring" d="${PATH_PREFIX},${largeArcFlag(normalizedValue)},1,${circlePosX(
-    normalizedValue
-  )},${circlePosY(normalizedValue)}${PATH_SUFIX}"></path>
-    <g class="knob-dial">
-      <circle class="knob-top" cx="${CIRCLE_POS}" cy="${CIRCLE_POS}" r="${DIAL_SIZE}"></circle>
-      <circle class="knob-indictator-dot" cx="${CIRCLE_POS}" cy="${DOT_OFFSET}" r="1" style="transform: rotate(${
-    30 + 3 * normalizedValue
-  }deg);"></circle>
-    </g>
-  `;
-  svgEl.setAttribute('viewBox', '0 0 40 40');
-  wrapperEl.appendChild(svgEl);
-  const internalCallback = (val: number) => {
-    callback(val);
-    const norm = ((val - min) * 100) / (max - min);
+  const MAX_MIX_DELTA = (max - min) / 100;
+
+  function updateVisuals(val: number) {
+    const norm = (val - min) / MAX_MIX_DELTA;
     const ring: SVGPathElement = svgEl.getElementsByClassName('knob-ring')[0] as SVGPathElement;
     ring.setAttribute(
       'd',
@@ -168,7 +149,29 @@ export const createKnob = (
     );
     const dot: SVGCircleElement = svgEl.getElementsByClassName('knob-indictator-dot')[0] as SVGCircleElement;
     dot.style.transform = `rotate(${30 + 3 * norm}deg)`;
-  };
+  }
+
+  function internalCallback(val: number) {
+    callback(val);
+    updateVisuals(val);
+  }
+
+  const el: HTMLElement = createEl('div', 'knob');
+  const wrapperEl: HTMLElement = createEl('div', 'knob-range-wrapper');
+  // create svg
+  const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgEl.setAttribute('class', 'knob-visual');
+  svgEl.innerHTML = `
+    <path class="knob-ring-bg" d="${PATH_PREFIX},1,1,${circlePosX(100)},${circlePosY(100)}${PATH_SUFIX}"></path>
+    <path class="knob-ring"></path>
+    <g class="knob-dial">
+      <circle class="knob-top" cx="${CIRCLE_POS}" cy="${CIRCLE_POS}" r="${DIAL_SIZE}"></circle>
+      <circle class="knob-indictator-dot" cx="${CIRCLE_POS}" cy="${DOT_OFFSET}" r="1"></circle>
+    </g>
+  `;
+  svgEl.setAttribute('viewBox', '0 0 40 40');
+  updateVisuals(value);
+  wrapperEl.appendChild(svgEl);
   // create range
   const rangeEl = createRange(internalCallback, max, min, step);
   rangeEl.setAttribute('class', 'knob-range');
