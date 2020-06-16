@@ -29,7 +29,7 @@ export const demoRhythm: Tracks = [
     'DnB_Perc_15.wav',
     TRACK_STATE_ON,
     1,
-    0,
+    -.2,
     0,
     [ 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0 ],
   ],

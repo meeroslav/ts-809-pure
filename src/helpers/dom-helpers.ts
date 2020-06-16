@@ -43,15 +43,15 @@ const createRange = (callback: (value: number) => void, max = 1, min = 0, step =
   return el;
 };
 
-const FADER_H = 6;
-const FADER_W = 70;
-const FADER_X = 5;
-const FADER_Y = 4;
-const FADER_W_MIDDLE = FADER_W / 2;
-const FADER_X_MIDDLE = FADER_W_MIDDLE + FADER_X;
 const HANDLE_W = 6;
 const HANDLE_H = 10;
-const HANDLE_OFFSET_H = 2;
+const FADER_H = 4;
+const FADER_W = 80 - HANDLE_W / 2;
+const FADER_X = HANDLE_W / 2;
+const FADER_Y = 6;
+const FADER_W_MIDDLE = FADER_W / 2;
+const FADER_X_MIDDLE = FADER_W_MIDDLE + FADER_X;
+const HANDLE_OFFSET_H = (HANDLE_H - FADER_H) / 2;
 const HANDLE_OFFSET_W = FADER_X - HANDLE_W / 2;
 
 export const createFader = (
@@ -119,16 +119,17 @@ const CIRCLE_SIZE = 15;
 const DIAL_SIZE = 10;
 const DOT_OFFSET = CIRCLE_POS + 7;
 const radianConverter = Math.PI / 180;
-function circlePosX(value: number): number {
-  return CIRCLE_SIZE * Math.cos((value * 3 + 120) * radianConverter) + CIRCLE_POS;
+function circlePosX(value: number, startAngle = 120): number {
+  return CIRCLE_SIZE * Math.cos((value * 3 + startAngle) * radianConverter) + CIRCLE_POS;
 }
-function circlePosY(value: number): number {
-  return CIRCLE_SIZE * Math.sin((value * 3 + 120) * radianConverter) + CIRCLE_POS;
+function circlePosY(value: number, startAngle = 120): number {
+  return CIRCLE_SIZE * Math.sin((value * 3 + startAngle) * radianConverter) + CIRCLE_POS;
 }
 function largeArcFlag(value: number) {
   return value > 60 ? 1 : 0;
 }
 const PATH_PREFIX = `M${circlePosX(0)},${circlePosY(0)}A${CIRCLE_SIZE},${CIRCLE_SIZE},0`;
+const CENTRAL_PATH_PREFIX = `M${circlePosX(0, 270)},${circlePosY(0, 270)}A${CIRCLE_SIZE},${CIRCLE_SIZE},0`;
 const PATH_SUFIX = `L${CIRCLE_POS},${CIRCLE_POS}Z`;
 export const createKnob = (
   label: string,
@@ -136,19 +137,29 @@ export const createKnob = (
   callback: (value: number) => void,
   max = 1,
   min = 0,
-  step = 0.01
+  step = 0.01,
+  centralized = false
 ) => {
   const MAX_MIX_DELTA = (max - min) / 100;
 
   function updateVisuals(val: number) {
-    const norm = (val - min) / MAX_MIX_DELTA;
     const ring: SVGPathElement = svgEl.getElementsByClassName('knob-ring')[0] as SVGPathElement;
-    ring.setAttribute(
-      'd',
-      `${PATH_PREFIX},${largeArcFlag(norm)},1,${circlePosX(norm)},${circlePosY(norm)}${PATH_SUFIX}`
-    );
     const dot: SVGCircleElement = svgEl.getElementsByClassName('knob-indictator-dot')[0] as SVGCircleElement;
-    dot.style.transform = `rotate(${30 + 3 * norm}deg)`;
+    if (centralized) {
+      const norm = val / MAX_MIX_DELTA; //-50..50
+      ring.setAttribute(
+        'd',
+        `${CENTRAL_PATH_PREFIX},0,${val > 0 ? 1 : 0},${circlePosX(norm, 270)},${circlePosY(norm, 270)}${PATH_SUFIX}`
+      );
+      dot.style.transform = `rotate(${180 + 3 * norm}deg)`;
+    } else {
+      const norm = (val - min) / MAX_MIX_DELTA; //0..100
+      ring.setAttribute(
+        'd',
+        `${PATH_PREFIX},${largeArcFlag(norm)},1,${circlePosX(norm)},${circlePosY(norm)}${PATH_SUFIX}`
+      );
+      dot.style.transform = `rotate(${30 + 3 * norm}deg)`;
+    }
   }
 
   function internalCallback(val: number) {

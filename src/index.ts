@@ -117,8 +117,10 @@ const renderTracks = () => {
     const trackEl = createEl('div', 'track');
     // trackInfo element
     const trackInfoEl = createEl('div', 'track-info');
+    const trackMainEl = createEl('div', 'track-info-main');
+
     const nickEl = createEl('span', 'track-name', track[TRACK_NICK]);
-    trackInfoEl.appendChild(nickEl);
+    trackMainEl.appendChild(nickEl);
     const soloEl = createBtn(
       'Solo',
       'S',
@@ -135,7 +137,7 @@ const renderTracks = () => {
         markActiveTracks();
       }
     );
-    trackInfoEl.appendChild(soloEl);
+    trackMainEl.appendChild(soloEl);
     const muteEl = createBtn(
       'Mute',
       'M',
@@ -152,12 +154,14 @@ const renderTracks = () => {
         }
       }
     );
-    trackInfoEl.appendChild(muteEl);
+    trackMainEl.appendChild(muteEl);
     const volumeEl = createFader('volume', track[TRACK_VOLUME], value => {
       track[TRACK_VOLUME] = value;
     });
-    trackInfoEl.appendChild(volumeEl);
-    const panEl = createFader(
+    trackMainEl.appendChild(volumeEl);
+    trackInfoEl.appendChild(trackMainEl);
+
+    const panEl = createKnob(
       'pan',
       track[TRACK_PAN],
       value => {
@@ -169,7 +173,7 @@ const renderTracks = () => {
       true
     );
     trackInfoEl.appendChild(panEl);
-    const pitchEl = createFader(
+    const pitchEl = createKnob(
       'pitch',
       track[TRACK_PITCH],
       value => {

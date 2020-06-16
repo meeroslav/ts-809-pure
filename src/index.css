@@ -5,8 +5,8 @@
   --font-size-sm: 0.6rem;
   --cl-gray1: #232323;
   --cl-gray2: #343434;
-  --cl-gray3: #696969;
-  --cl-gray4: #8e8e8e;
+  --cl-gray3: #454545;
+  --cl-gray4: #676767;
   --cl-gray5: #e1e1e1;
   --cl-orange: #a46e30;
   --cl-red: #a43430;
@@ -150,6 +150,12 @@ button {
   margin-bottom: var(--spacing);
 }
 
+.track-info-main {
+  display: flex;
+  max-width: 9rem;
+  flex-wrap: wrap;
+}
+
 .track-name {
   display: flex;
   align-items: center;
@@ -180,7 +186,6 @@ button {
 }
 .track-solo {
   background: var(--cl-solo);
-  color: var(--cl-back);
 }
 
 .step-on,
@@ -269,13 +274,13 @@ button {
 }
 .knob-top {
   fill: var(--cl-gray2);
-  stroke: var(--cl-gray1);
-  stroke-width: 1;
+  stroke: var(--cl-gray3);
+  stroke-width: .7;
 }
 .fader-handle {
   fill: var(--cl-gray4);
   stroke: var(--cl-gray1);
-  stroke-width: 1;
+  stroke-width: .7;
 }
 .knob-indictator-dot {
   transform-origin: center;
