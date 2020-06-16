@@ -16,6 +16,7 @@ export const createLowPass = (context: AudioContext, frequency?: number): Biquad
   filter.frequency.value = frequency || context.sampleRate / 2;
   return filter;
 };
+export const LOW_PASS_MIN = 40;
 
 export interface EchoNode extends AudioNode {
   time: AudioParam;

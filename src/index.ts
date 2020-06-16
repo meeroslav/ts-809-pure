@@ -23,6 +23,7 @@ import {
   createEcho,
   EchoNode,
   createPanner,
+  LOW_PASS_MIN,
 } from './helpers';
 import { createBtn, createKnob, createFader } from './helpers/dom-helpers';
 
@@ -62,6 +63,7 @@ const togglePlay = () => {
 const setBpm = (value: number) => {
   bpm = value;
   if (playState) {
+    clearInterval(playingInterval);
     playingInterval = startPlaying(demoRhythm);
   }
 };
@@ -174,7 +176,7 @@ const renderTracks = () => {
     );
     trackInfoEl.appendChild(panEl);
     const pitchEl = createKnob(
-      'pitch',
+      'detune',
       track[TRACK_PITCH],
       value => {
         track[TRACK_PITCH] = value;
@@ -218,15 +220,26 @@ const renderInfo = () => {
 
   const lowpassSection = createEl('div', 'info-block');
   lowpassSection.appendChild(createEl('label', 'info-block-label', 'low pass'));
-  const lowPassEl = createKnob(
+  // Logarithm (base 2) to compute how many octaves fall in the range.
+  const maxLowPass = audioContext.sampleRate / 2;
+  const lowPassFreqEl = createKnob(
     'frequency',
     lowPassFilter.frequency.value,
     value => (lowPassFilter.frequency.value = value),
-    audioContext.sampleRate / 2,
-    0,
+    maxLowPass,
+    LOW_PASS_MIN,
     1
   );
-  lowpassSection.appendChild(lowPassEl);
+  const lowPassQualityEl = createKnob(
+    'quality',
+    lowPassFilter.Q.value,
+    value => (lowPassFilter.Q.value = value),
+    30, // 30dB
+    0,
+    0.1
+  );
+  lowpassSection.appendChild(lowPassFreqEl);
+  lowpassSection.appendChild(lowPassQualityEl);
 
   const delaySection = createEl('div', 'info-block');
   delaySection.appendChild(createEl('label', 'info-block-label', 'delay'));
